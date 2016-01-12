@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ <!-- 指定 Spring 配置文件的 DTD 信息 --> 
+ <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+"http://www.springframework.org/dtd/spring-beans-2.0.dtd"> 
+ <!-- Spring 配置文件的根元素 --> 
+ <beans> 
+	<bean id="test" class="SpringTest"></bean>
+	<bean id="t" class="SpringTest"></bean>
+	<bean name="t1,t2" class="SpringTest"></bean>
+ </beans>

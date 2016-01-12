@@ -1,5 +1,4 @@
 package org.kevi;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -16,7 +15,6 @@ public class SpringTest {
 		System.out.println(t==t1);
 		System.out.println(t==t2);
 		System.out.println(t1==t2);
-		DispatcherServlet a;
 	}
 	
 	public void test() {

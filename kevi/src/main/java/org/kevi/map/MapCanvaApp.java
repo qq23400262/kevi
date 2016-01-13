@@ -98,6 +98,7 @@ public class MapCanvaApp {
 				final int y = e.y;
 				if(state==1) {
 					clearCanvas();
+					
 					mapData.loop(new TilesHandle() {
 						public void action(Tiles tiles, int rIdx, int cIdx) {
 							// TODO Auto-generated method stub
@@ -106,6 +107,7 @@ public class MapCanvaApp {
 						}
 					});
 					mapData.updateOrigin();
+					
 				}
 			}
 		});
@@ -127,13 +129,15 @@ public class MapCanvaApp {
 		
 		this.canvas.addPaintListener(new PaintListener() {
             public void paintControl(final PaintEvent e) {
-            	mapData = new MapObject(2, canvas.getSize().x,canvas.getSize().y, new LatLng(30.813803, 104.303287));
+            	
+            	mapData = new MapObject(3, canvas.getSize().x,canvas.getSize().y, new LatLng(30.813803, 104.303287));
             	mapData.loop(new TilesHandle() {
 					public void action(Tiles tiles, int rIdx, int cIdx) {
 						// TODO Auto-generated method stub
 						tiles.appendToCanva(e.gc);
 					}
 				});
+            	e.gc.dispose();
             }
         });  
 	}

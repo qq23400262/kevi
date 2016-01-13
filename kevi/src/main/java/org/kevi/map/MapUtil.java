@@ -1,7 +1,10 @@
 package org.kevi.map;
 
+import java.text.DecimalFormat;
+
 public class MapUtil {
-	final static int TILES_SIZE=256; 
+	final static int TILES_SIZE=256;
+	static DecimalFormat df0 = new DecimalFormat("0");
 	public static int getEndXYByZoom(int z) {
 		return (int) Math.pow(2, z) - 1;
 	}
@@ -28,12 +31,14 @@ public class MapUtil {
 	
 	public static Point ll2p(LatLng latLng, int zoom) {
 		//lng对x,lat对y
-		return new Point((int)lngToPixel(latLng.getLng(),zoom),(int)latToPixel(latLng.getLat(),zoom));
+		int x = Integer.parseInt(df0.format(lngToPixel(latLng.getLng(),zoom)));
+		int y = Integer.parseInt(df0.format(latToPixel(latLng.getLat(),zoom)));
+		return new Point(x, y);
 	}
 	
 	public static LatLng p2ll(Point p, int zoom) {
 		//lng对x,lat对y
-		return new LatLng(pixelToLng(p.x,zoom),pixelToLat(p.y,zoom));
+		return new LatLng(pixelToLat(p.y,zoom),pixelToLng(p.x,zoom));
 	}
 	
 }

@@ -59,10 +59,11 @@ public class MapObject {
 			}
 		}
 	}
-	
+	public static void main(String[] args) {
+	}
 	private void initTiles() {
-//		System.out.println(curBounds.getEndY(zoom)+"==="+curBounds.getStartY(zoom));
-//		System.out.println(curBounds.getEndX(zoom)+"==="+curBounds.getStartX(zoom));
+		System.out.println(curBounds.getEndY(zoom)+"==="+curBounds.getStartY(zoom));
+		System.out.println(curBounds.getEndX(zoom)+"==="+curBounds.getStartX(zoom));
 		tilesArray = new Tiles[curBounds.getEndY(zoom)-curBounds.getStartY(zoom)][curBounds.getEndX(zoom)-curBounds.getStartX(zoom)];
 		//初始化Tiles
 		loop(new TilesHandle() {

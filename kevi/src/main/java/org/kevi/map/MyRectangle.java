@@ -16,7 +16,9 @@ public class MyRectangle extends Tiles{
 
 	@Override
 	public void appendToCanva(GC gc) {
-		gc.drawImage(new Image(null, tilesUrl), pixel.x, pixel.y);
+		Image image = new Image(null, tilesUrl);
+		gc.drawImage(image, pixel.x, pixel.y);
+		image.dispose();
 		//gc.drawRectangle(x, y, width, height);
 	}
 }

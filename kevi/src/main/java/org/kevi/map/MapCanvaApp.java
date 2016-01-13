@@ -55,7 +55,7 @@ public class MapCanvaApp {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(672, 671);
+		shell.setSize(672, 672);
 		shell.setText("SWT Application");
 		initCanvas();
 		
@@ -67,6 +67,10 @@ public class MapCanvaApp {
 				tiles.appendToCanva(gc);
 			}
 		});
+	}
+	
+	private void clearCanvas() {
+		gc.fillRectangle(0,0,canvas.getSize().x,canvas.getSize().y);
 	}
 	
 	int state = 0;//1是拖动
@@ -93,7 +97,7 @@ public class MapCanvaApp {
 				final int x = e.x;
 				final int y = e.y;
 				if(state==1) {
-//					clearCanvas();
+					clearCanvas();
 					mapData.loop(new TilesHandle() {
 						public void action(Tiles tiles, int rIdx, int cIdx) {
 							// TODO Auto-generated method stub

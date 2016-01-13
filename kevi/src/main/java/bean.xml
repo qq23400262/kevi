@@ -4,5 +4,5 @@
 "http://www.springframework.org/dtd/spring-beans-2.0.dtd"> 
  <!-- Spring 配置文件的根元素 --> 
  <beans> 
-	<bean id="myRectangle" class="org.kevi.map.MyRectangle"></bean>
+	
  </beans>

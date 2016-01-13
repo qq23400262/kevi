@@ -3,9 +3,12 @@ package org.kevi.map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -52,27 +55,81 @@ public class MapCanvaApp {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(617, 462);
+		shell.setSize(672, 671);
 		shell.setText("SWT Application");
-		shell.setLayout(null);
 		initCanvas();
+		
 	}
+	
+	private void updateCanvas() {
+		mapData.loop(new TilesHandle() {
+			public void action(Tiles tiles, int rIdx, int cIdx) {
+				tiles.appendToCanva(gc);
+			}
+		});
+	}
+	
+	int state = 0;//1是拖动
+	int xd;
+	int yd;
+	MapObject mapData;
 	private void initCanvas() {
-		canvas = new Canvas(shell, SWT.NONE);
+		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
+		canvas = new Canvas(shell, SWT.NO_BACKGROUND  |  SWT.DOUBLE_BUFFERED);
+		canvas.addMouseWheelListener(new MouseWheelListener() {
+			public void mouseScrolled(MouseEvent e) {
+				if(e.count==3) {//上滚
+					mapData.zoomOut();
+					updateCanvas();
+				} else if(e.count==-3) {//下滚
+					mapData.zoomIn();
+					updateCanvas();
+				}
+			}
+		});
+		gc = new GC(canvas);
+		canvas.addMouseMoveListener(new MouseMoveListener() {
+			public void mouseMove(MouseEvent e) {
+				final int x = e.x;
+				final int y = e.y;
+				if(state==1) {
+//					clearCanvas();
+					mapData.loop(new TilesHandle() {
+						public void action(Tiles tiles, int rIdx, int cIdx) {
+							// TODO Auto-generated method stub
+							tiles.move(x - mapData.originX+xd, y - mapData.originY+yd);
+							tiles.appendToCanva(gc);
+						}
+					});
+					mapData.updateOrigin();
+				}
+			}
+		});
 		canvas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				gc.drawLine(0, 0, 50, 50);
+				state = 1;
+				xd = mapData.originX - e.x;
+				yd = mapData.originY - e.y;
+				shell.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_SIZEALL));
+			}
+			@Override
+			public void mouseUp(MouseEvent e) {
+				state = 0;
+				shell.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
 			}
 		});
 		canvas.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		canvas.setBounds(0, 0, shell.getSize().x, shell.getSize().y);
 		
 		this.canvas.addPaintListener(new PaintListener() {
-            public void paintControl(PaintEvent e) {
-            	gc = new GC(canvas);
-        		Tiles tiles = ctx.getBean("myRectangle",Tiles.class);
-        		tiles.appendToCanva(gc);
+            public void paintControl(final PaintEvent e) {
+            	mapData = new MapObject(2, canvas.getSize().x,canvas.getSize().y, new LatLng(30.813803, 104.303287));
+            	mapData.loop(new TilesHandle() {
+					public void action(Tiles tiles, int rIdx, int cIdx) {
+						// TODO Auto-generated method stub
+						tiles.appendToCanva(e.gc);
+					}
+				});
             }
         });  
 	}

@@ -42,5 +42,10 @@ public class LatLngBounds {
 	public int getEndY(int zoom) {
 		return (int)(MapUtil.latToPixel(end.lat, zoom)/MapUtil.TILES_SIZE)+1;
 	}
-	
+	public Point getStartPixel(int zoom) {
+		return MapUtil.ll2p(start, zoom);
+	}
+	public Point getEndPixel(int zoom) {
+		return MapUtil.ll2p(end, zoom);
+	}
 }

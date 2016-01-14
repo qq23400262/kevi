@@ -23,12 +23,14 @@ public class MapObject {
 		init();
 	}
 	public void updateCurBounds() {
-		Point pStart = new Point(centerPixel.x - mapWidth/2, centerPixel.y - mapHeight/2);
-		Point pEnd = new Point(centerPixel.x + mapWidth/2, centerPixel.y + mapHeight/2);
+		LatLng start = new LatLng(this.center);
+		start.move(new Point(-mapWidth/2, -mapHeight/2), zoom);
+		LatLng end = new LatLng(this.center);
+		end.move(new Point(mapWidth/2, mapHeight/2), zoom);
 		if(curBounds == null) {
-			curBounds = new LatLngBounds(MapUtil.p2ll(pStart, zoom), MapUtil.p2ll(pEnd, zoom));
+			curBounds = new LatLngBounds(start, end);
 		} else {
-			curBounds.setBounds(MapUtil.p2ll(pStart, zoom), MapUtil.p2ll(pEnd, zoom));
+			curBounds.setBounds(start, end);
 		}
 	}
 	
@@ -59,30 +61,22 @@ public class MapObject {
 			}
 		}
 	}
-	public static void main(String[] args) {
-	}
-	private void initTiles() {
-		System.out.println(curBounds.getEndY(zoom)+"==="+curBounds.getStartY(zoom));
-		System.out.println(curBounds.getEndX(zoom)+"==="+curBounds.getStartX(zoom));
+	
+	public void initTiles() {
 		tilesArray = new Tiles[curBounds.getEndY(zoom)-curBounds.getStartY(zoom)][curBounds.getEndX(zoom)-curBounds.getStartX(zoom)];
+		System.out.println(tilesArray.length+","+tilesArray[0].length);
 		//初始化Tiles
 		loop(new TilesHandle() {
 			public void action(Tiles t, int rIdx, int cIdx) {
-				t = new MyRectangle(rIdx, cIdx, zoom);
+				t = new MyRectangle(rIdx+curBounds.getStartY(zoom), cIdx+curBounds.getStartX(zoom), zoom);
 				t.initPositionByArrayIndex(rIdx, cIdx);
 				tilesArray[rIdx][cIdx]=t;
 			}
 		});
 	}
-	public void move(final int x,final int y) {
-		loop(new TilesHandle() {
-			public void action(Tiles t, int rIdx, int cIdx) {
-				move(x, y);
-			}
-		});
-	}
-	public void panTo(LatLng latLng) {
-		Point p = MapUtil.ll2p(latLng, zoom);
-		move(p.x, p.y);		
+	public void move(Point p) {
+		this.center.move(p, zoom);
+		System.out.println(this.center);
+		
 	}
 }

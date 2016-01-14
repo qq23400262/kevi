@@ -16,11 +16,12 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class MapCanvaApp {
-
-	protected Shell shell;
-	protected Canvas canvas;
-	protected GC gc; 
+public class MapCanvaApp extends Thread implements MapHelper{
+	Shell shell;
+	Canvas canvas;
+	GC gc;
+	Point mousePoint = new Point(0, 0);
+	MapContext context = new MapContext();
 	ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:bean.xml");
 	/**
 	 * Launch the application.
@@ -55,6 +56,11 @@ public class MapCanvaApp {
 	 */
 	protected void createContents() {
 		shell = new Shell();
+		shell.addMouseMoveListener(new MouseMoveListener() {
+			public void mouseMove(MouseEvent e) {
+				
+			}
+		});
 		shell.setSize(672, 672);
 		shell.setText("SWT Application");
 		initCanvas();
@@ -72,6 +78,7 @@ public class MapCanvaApp {
 	private void clearCanvas() {
 		gc.fillRectangle(0,0,canvas.getSize().x,canvas.getSize().y);
 	}
+	
 	
 	int state = 0;//1是拖动
 	int xd;
@@ -94,34 +101,22 @@ public class MapCanvaApp {
 		gc = new GC(canvas);
 		canvas.addMouseMoveListener(new MouseMoveListener() {
 			public void mouseMove(MouseEvent e) {
-				final int x = e.x;
-				final int y = e.y;
-				if(state==1) {
-					clearCanvas();
-					
-					mapData.loop(new TilesHandle() {
-						public void action(Tiles tiles, int rIdx, int cIdx) {
-							// TODO Auto-generated method stub
-							tiles.move(x - mapData.originX+xd, y - mapData.originY+yd);
-							tiles.appendToCanva(gc);
-						}
-					});
-					mapData.updateOrigin();
-					
-				}
+				mousePoint.setX(e.x+canvas.getBounds().x);
+				mousePoint.setY(e.y+canvas.getBounds().y);
 			}
 		});
+		
 		canvas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				state = 1;
 				xd = mapData.originX - e.x;
 				yd = mapData.originY - e.y;
 				shell.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_SIZEALL));
+				moveMapStart();
 			}
 			@Override
 			public void mouseUp(MouseEvent e) {
-				state = 0;
+				moveEnd();
 				shell.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_ARROW));
 			}
 		});
@@ -129,7 +124,6 @@ public class MapCanvaApp {
 		
 		this.canvas.addPaintListener(new PaintListener() {
             public void paintControl(final PaintEvent e) {
-            	
             	mapData = new MapObject(3, canvas.getSize().x,canvas.getSize().y, new LatLng(30.813803, 104.303287));
             	mapData.loop(new TilesHandle() {
 					public void action(Tiles tiles, int rIdx, int cIdx) {
@@ -141,4 +135,50 @@ public class MapCanvaApp {
             }
         });  
 	}
+
+	public void run() {
+		while(state==1) {
+			context.request(this);
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	public Display getDisplay() {
+		return this.getDisplay();
+	}
+	public void moveMap() {
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				clearCanvas();
+				mapData.loop(new TilesHandle() {
+					public void action(Tiles tiles, int rIdx, int cIdx) {
+						// TODO Auto-generated method stub
+						tiles.move(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd);
+						tiles.appendToCanva(gc);
+					}
+				});
+				mapData.move(new Point(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd));
+				mapData.updateOrigin();
+//				canvas.setBounds(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd, canvas.getSize().x, canvas.getSize().y);
+			}
+		});
+	}
+	private void moveMapStart() {
+		state = 1;
+		context.setHandler(new MapMoveHandler());
+		new Thread(this).start();
+	}
+	public void moveEnd() {
+		state = 0;
+	}
+
+	public void showLatLng() {
+		// TODO Auto-generated method stub
+		System.out.println("cur position:");
+	}
+	
 }

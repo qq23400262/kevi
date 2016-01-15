@@ -1,14 +1,16 @@
 package org.kevi.map;
 
+import org.eclipse.swt.graphics.GC;
+
 public class MapObject {
 	//地图原点坐标
 	int mapWidth;
 	int mapHeight;
+	int zoom = 0;
 	int minZoom=0;
 	int maxZoom=5;
 	int originX = 0;
 	int originY = 0;
-	int zoom = 0;
 	Tiles[][] tilesArray;
 	LatLng center;
 	Point centerPixel;
@@ -74,6 +76,21 @@ public class MapObject {
 			}
 		});
 	}
+	public void drawTiles(GC gc) {
+		Point startPx = curBounds.getStartPixel(zoom);
+		int xd = startPx.x%MapUtil.TILES_SIZE;
+		int yd = startPx.y%MapUtil.TILES_SIZE;
+		int x0 = curBounds.getStartX(zoom);
+		int x1 = curBounds.getEndX(zoom);
+		int y0 = curBounds.getStartY(zoom);
+		int y1 = curBounds.getEndY(zoom);
+		for (int i = 0; i <= y1 - y0 ; i++) {
+			for(int j = 0; j <= x1 - x0; j++) {
+				new MyRectangle(j+y0, i+x0, zoom).appendToCanva(gc);
+			}
+		}
+	}
+	
 	public void move(Point p) {
 		this.center.move(p, zoom);
 		System.out.println(this.center);

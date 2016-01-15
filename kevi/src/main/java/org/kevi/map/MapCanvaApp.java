@@ -165,19 +165,22 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		return this.getDisplay();
 	}
 	public void moveMap() {
+		
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				clearCanvas();
-				mapData.loop(new TilesHandle() {
-					public void action(Tiles tiles, int rIdx, int cIdx) {
-						// TODO Auto-generated method stub
-						tiles.move(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd);
-						tiles.appendToCanva(gc);
-					}
-				});
-				mapData.move(new Point(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd));
-				mapData.updateOrigin();
-//				canvas.setBounds(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd, canvas.getSize().x, canvas.getSize().y);
+				
+				mapData.drawTiles(gc);
+//				mapData.loop(new TilesHandle() {
+//					public void action(Tiles tiles, int rIdx, int cIdx) {
+//						// TODO Auto-generated method stub
+//						tiles.move(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd);
+//						tiles.appendToCanva(gc);
+//					}
+//				});
+//				mapData.move(new Point(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd));
+//				mapData.updateOrigin();
+////				canvas.setBounds(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd, canvas.getSize().x, canvas.getSize().y);
 			}
 		});
 	}

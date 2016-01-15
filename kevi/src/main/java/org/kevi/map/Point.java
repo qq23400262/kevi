@@ -21,8 +21,28 @@ public class Point {
 		this.y = y;
 	}
 	
+	public Point setPoint(Point p) {
+		this.x = p.x;
+		this.y = p.y;
+		return this;
+	}
+	public Point subPoint(Point p) {
+		this.x -= p.x;
+		this.y -= p.y;
+		return this;
+	}
+	public Point addPoint(Point p) {
+		this.x += p.x;
+		this.y += p.y;
+		return this;
+	}
+	
+	@Override
 	public String toString() {
-		return "xy("+x+","+y+")";
+		return "Point [x=" + x + ", y=" + y + "]";
+	}
+	public boolean equals(Point p) {
+		return p.x == this.x && p.y == this.y; 
 	}
 	
 }

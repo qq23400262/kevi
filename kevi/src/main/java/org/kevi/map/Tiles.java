@@ -2,12 +2,15 @@ package org.kevi.map;
 
 import org.eclipse.swt.graphics.GC;
 
-public class Tiles {
+public class Tiles extends Thread {
 	Point pixel;
 	//tiles size:256*256px
 	protected String tilesUrl = "D:/gmap/t_ok/0/0/0.png";
+	GC gc;
 	public void appendToCanva(GC gc) {
-		gc.drawRectangle(pixel.x, pixel.y, MapUtil.TILES_SIZE, MapUtil.TILES_SIZE);
+		//gc.drawRectangle(pixel.x, pixel.y, MapUtil.TILES_SIZE, MapUtil.TILES_SIZE);
+		this.gc = gc;
+		this.start();
 	}
 	public Tiles(int rIdx, int cIdx, int zIdx){
 		pixel = new Point(0, 0);
@@ -48,6 +51,12 @@ public class Tiles {
 	public void setPixel(Point pixel) {
 		this.pixel = pixel;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return "Tiles [pixel=" + pixel + ", tilesUrl=" + tilesUrl + "]";
+	}
+	@Override
+	public void run() {
+		gc.drawRectangle(pixel.x, pixel.y, MapUtil.TILES_SIZE, MapUtil.TILES_SIZE);
+	}
 }

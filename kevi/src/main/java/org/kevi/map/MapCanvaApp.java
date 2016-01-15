@@ -21,10 +21,10 @@ public class MapCanvaApp extends Thread implements MapHelper{
 	Canvas canvas;
 	GC gc;
 	Point mousePoint = new Point(0, 0);
+	Point mouseLastPoint = new Point(0, 0);
 	MapContext context = new MapContext();
 	Thread thread;
 	boolean isRunning = true;
-	boolean mousePointChange = false;
 	/**
 	 * Launch the application.
 	 * @param args
@@ -78,50 +78,43 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		thread = new Thread(this);
 		thread.start();
 	}
-	private void updateCanvas() {
-		mapData.loop(new TilesHandle() {
-			public void action(Tiles tiles, int rIdx, int cIdx) {
-				tiles.appendToCanva(gc);
-			}
-		});
-	}
 	
 	private void clearCanvas() {
 		gc.fillRectangle(0,0,canvas.getSize().x,canvas.getSize().y);
 	}
 	
-	int xd;
-	int yd;
 	MapObject mapData;
 	
 	private void initCanvas() {
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
-		canvas = new Canvas(shell, SWT.NO_BACKGROUND  |  SWT.DOUBLE_BUFFERED);
+		canvas = new Canvas(shell, SWT.NO_BACKGROUND);// |  SWT.DOUBLE_BUFFERED
 		canvas.addMouseWheelListener(new MouseWheelListener() {
 			public void mouseScrolled(MouseEvent e) {
 				if(e.count==3) {//上滚
 					mapData.zoomOut();
-					updateCanvas();
 				} else if(e.count==-3) {//下滚
 					mapData.zoomIn();
-					updateCanvas();
 				}
 			}
 		});
 		gc = new GC(canvas);
 		canvas.addMouseMoveListener(new MouseMoveListener() {
 			public void mouseMove(MouseEvent e) {
-				mousePoint.setX(e.x+canvas.getBounds().x);
-				mousePoint.setY(e.y+canvas.getBounds().y);
-				mousePointChange = true;
+				mousePoint.setX(e.x);
+				mousePoint.setY(e.y);
+				synchronized(mapData){
+				//moveEnd();
+					}
 			}
 		});
 		
 		canvas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				xd = mapData.originX - e.x;
-				yd = mapData.originY - e.y;
+				mousePoint.setX(e.x);
+				mousePoint.setY(e.y);
+				mouseLastPoint.setX(e.x);
+				mouseLastPoint.setY(e.y);
 				shell.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_SIZEALL));
 				moveMapStart();
 			}
@@ -135,13 +128,8 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		
 		this.canvas.addPaintListener(new PaintListener() {
             public void paintControl(final PaintEvent e) {
-            	mapData = new MapObject(1, canvas.getSize().x,canvas.getSize().y, new LatLng(30.813803, 104.303287));
-            	mapData.loop(new TilesHandle() {
-					public void action(Tiles tiles, int rIdx, int cIdx) {
-						// TODO Auto-generated method stub
-						tiles.appendToCanva(e.gc);
-					}
-				});
+            	mapData = new MapObject(4, canvas.getSize().x,canvas.getSize().y, new LatLng(30.813803, 104.303287));
+            	mapData.drawTiles(gc);
             	e.gc.dispose();
             }
         });  
@@ -149,15 +137,16 @@ public class MapCanvaApp extends Thread implements MapHelper{
 
 	public void run() {
 		while (isRunning) {
-			if(mousePointChange) {
+			synchronized(mouseLastPoint) {
+			if(!mousePoint.equals(mouseLastPoint)) {
 				context.request(this);
-				mousePointChange = false;
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 	}
@@ -165,20 +154,14 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		return this.getDisplay();
 	}
 	public void moveMap() {
-		
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				clearCanvas();
-				
+				//clearCanvas();
+				mapData.move(mouseLastPoint.subPoint(mousePoint));
 				mapData.drawTiles(gc);
-//				mapData.loop(new TilesHandle() {
-//					public void action(Tiles tiles, int rIdx, int cIdx) {
-//						// TODO Auto-generated method stub
-//						tiles.move(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd);
-//						tiles.appendToCanva(gc);
-//					}
+				mouseLastPoint.setPoint(mousePoint);
 //				});
-//				mapData.move(new Point(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd));
+				
 //				mapData.updateOrigin();
 ////				canvas.setBounds(mousePoint.x - mapData.originX+xd, mousePoint.y - mapData.originY+yd, canvas.getSize().x, canvas.getSize().y);
 			}
@@ -192,9 +175,8 @@ public class MapCanvaApp extends Thread implements MapHelper{
 	}
 
 	public void showLatLng() {
-		// TODO Auto-generated method stub
-		if(mapData != null)
-		System.out.println("cur position:"+mapData.center);
+//		if(mapData != null)
+//		System.out.println("cur position:"+mapData.center);
 	}
 	
 }

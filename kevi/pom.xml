@@ -114,5 +114,15 @@
 			<artifactId>databinding</artifactId>
 			<version>1.1.0-I20070606-0010</version>
 		</dependency>
+		<dependency>
+		<groupId>org.apache.poi</groupId>
+		<artifactId>poi</artifactId>
+		<version>3.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.12</version>
+		</dependency>
     </dependencies>
 </project>

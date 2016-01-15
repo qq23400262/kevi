@@ -11,7 +11,23 @@ public class Tiles {
 	}
 	public Tiles(int rIdx, int cIdx, int zIdx){
 		pixel = new Point(0, 0);
-		tilesUrl = "D:/gmap/t_ok/"+zIdx+"/"+cIdx+"/"+rIdx+".png";
+		int maxIndex = (int) Math.pow(2, zIdx);
+		int z = zIdx;
+		int x = cIdx;
+		int y = rIdx;
+		while (x >= maxIndex) {
+			x = x - maxIndex;
+		}
+		while (y >= maxIndex) {
+			y = y - maxIndex;
+		}
+		while (x < 0) {
+			x += maxIndex;
+		}
+		while (y < 0) {
+			y += maxIndex;
+		}
+		tilesUrl = "D:/gmap/t_ok/"+z+"/"+x+"/"+y+".png";
 		initPositionByArrayIndex(cIdx, zIdx);
 		
 	}

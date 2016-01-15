@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 
 public class MapCanvaApp extends Thread implements MapHelper{
 	Shell shell;
@@ -22,7 +22,9 @@ public class MapCanvaApp extends Thread implements MapHelper{
 	GC gc;
 	Point mousePoint = new Point(0, 0);
 	MapContext context = new MapContext();
-	ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:bean.xml");
+	Thread thread;
+	boolean isRunning = true;
+	boolean mousePointChange = false;
 	/**
 	 * Launch the application.
 	 * @param args
@@ -56,6 +58,12 @@ public class MapCanvaApp extends Thread implements MapHelper{
 	 */
 	protected void createContents() {
 		shell = new Shell();
+		shell.addShellListener(new ShellAdapter() {
+			@Override
+			public void shellClosed(ShellEvent e) {
+				isRunning = false;
+			}
+		});
 		shell.addMouseMoveListener(new MouseMoveListener() {
 			public void mouseMove(MouseEvent e) {
 				
@@ -63,10 +71,13 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		});
 		shell.setSize(672, 672);
 		shell.setText("SWT Application");
-		initCanvas();
-		
+		init();
 	}
-	
+	protected void init() {
+		initCanvas();
+		thread = new Thread(this);
+		thread.start();
+	}
 	private void updateCanvas() {
 		mapData.loop(new TilesHandle() {
 			public void action(Tiles tiles, int rIdx, int cIdx) {
@@ -79,11 +90,10 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		gc.fillRectangle(0,0,canvas.getSize().x,canvas.getSize().y);
 	}
 	
-	
-	int state = 0;//1是拖动
 	int xd;
 	int yd;
 	MapObject mapData;
+	
 	private void initCanvas() {
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		canvas = new Canvas(shell, SWT.NO_BACKGROUND  |  SWT.DOUBLE_BUFFERED);
@@ -103,6 +113,7 @@ public class MapCanvaApp extends Thread implements MapHelper{
 			public void mouseMove(MouseEvent e) {
 				mousePoint.setX(e.x+canvas.getBounds().x);
 				mousePoint.setY(e.y+canvas.getBounds().y);
+				mousePointChange = true;
 			}
 		});
 		
@@ -124,7 +135,7 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		
 		this.canvas.addPaintListener(new PaintListener() {
             public void paintControl(final PaintEvent e) {
-            	mapData = new MapObject(3, canvas.getSize().x,canvas.getSize().y, new LatLng(30.813803, 104.303287));
+            	mapData = new MapObject(1, canvas.getSize().x,canvas.getSize().y, new LatLng(30.813803, 104.303287));
             	mapData.loop(new TilesHandle() {
 					public void action(Tiles tiles, int rIdx, int cIdx) {
 						// TODO Auto-generated method stub
@@ -137,8 +148,11 @@ public class MapCanvaApp extends Thread implements MapHelper{
 	}
 
 	public void run() {
-		while(state==1) {
-			context.request(this);
+		while (isRunning) {
+			if(mousePointChange) {
+				context.request(this);
+				mousePointChange = false;
+			}
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -168,17 +182,16 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		});
 	}
 	private void moveMapStart() {
-		state = 1;
-		context.setHandler(new MapMoveHandler());
-		new Thread(this).start();
+		context.changeHandler(MapContext.HandlerBean.MAP_MOVE_HANDLER);
 	}
 	public void moveEnd() {
-		state = 0;
+		context.changeHandler(MapContext.HandlerBean.MAP_SHOW_LATLNG_HANDLER);
 	}
 
 	public void showLatLng() {
 		// TODO Auto-generated method stub
-		System.out.println("cur position:");
+		if(mapData != null)
+		System.out.println("cur position:"+mapData.center);
 	}
 	
 }

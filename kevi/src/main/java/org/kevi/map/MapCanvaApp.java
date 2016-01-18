@@ -7,14 +7,14 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
 
 public class MapCanvaApp extends Thread implements MapHelper{
 	Shell shell;
@@ -95,6 +95,7 @@ public class MapCanvaApp extends Thread implements MapHelper{
 				} else if(e.count==-3) {//下滚
 					mapData.zoomIn();
 				}
+				mapData.drawTiles(gc);
 			}
 		});
 		gc = new GC(canvas);

@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.kevi.map.LatLng;
 import org.kevi.map.MapUtil;
@@ -65,16 +66,12 @@ public class AppTest
     	System.out.println(MapUtil.ll2p(MapUtil.p2ll(pStart1, 2), 2));
     	
     	Map<String, String> map = new HashMap<>();
-    	map.keySet();
-    	for (String key : map.keySet()) {
-    		
-    	}
     	map.put("1", "A");
     	map.put("2", "B");
     	map.put("26", "Z");
-    	Iterator<String> i = map.values().iterator();
+    	Iterator<Entry<String, String>> i = map.entrySet().iterator();
     	while (i.hasNext()) {
-    		System.out.println(i.next());
+    		System.out.println(i.next().getValue());
 		}
     	
 	}

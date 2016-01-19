@@ -5,6 +5,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Vector;
 
+/**
+ * 享元模式（Flyweight）
+ * 享元模式的主要目的是实现对象的共享，即共享池，当系统中对象多的时候可以减少内存的开销，
+ * 通常与工厂模式一起使用
+ * 过连接池的管理，实现了数据库连接的共享，不需要每一次都重新创建连接，
+ * 节省了数据库重新创建的开销，提升了系统的性能
+ * @author 422575
+ *
+ */
 public class 享元模式 {
 
 	public static void main(String[] args) {

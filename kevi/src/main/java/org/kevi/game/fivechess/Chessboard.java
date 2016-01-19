@@ -35,6 +35,7 @@ public class Chessboard {
 	GC gc;
 	ChessboardSet cbSet;//用来存放棋盘数据
 	Stack<Chess> stepStack;
+	AIPlayer pleryer;
 	boolean isGameOver = false;
 	/**
 	 * Launch the application.
@@ -113,6 +114,7 @@ public class Chessboard {
 		cbSet = new MapChessboardSet();
 		isGameOver = false;
 		isTurnBlack = true;
+		pleryer = new AIPlayerNo1(this);
 		updateStatus();
 	}
 	
@@ -121,7 +123,7 @@ public class Chessboard {
 		canvas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				putChess(e.x, e.y);
+				putChess(pixel2GridIndex(e.x), pixel2GridIndex(e.y));
 			}
 		});
 		canvas.setBounds(30, 30, 451, 451);//宽度最好是size(15)的倍数+1
@@ -167,9 +169,6 @@ public class Chessboard {
 	 */
 	public void putChess(int x, int y) {
 		if(isGameOver)return;
-		x = pixel2GridIndex(x);
-		y = pixel2GridIndex(y);
-		
 		if(!cbSet.isBlankChess(x, y)) {
 			return;
 		}
@@ -177,9 +176,12 @@ public class Chessboard {
 		stepStack.push(chess);
 		cbSet.addChess(chess, x, y);
 		chess.paint(this, x, y);
-		isTurnBlack = !isTurnBlack;
 		isGameOver = cbSet.isGameOver(chess, size);
+		isTurnBlack = !isTurnBlack;
 		updateStatus();
+		if(isTurnBlack==false) {
+			pleryer.putChess();
+		}
 	}
 	
 	public void updateStatus() {

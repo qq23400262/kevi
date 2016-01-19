@@ -60,7 +60,7 @@ public class MapChessboardSet extends ChessboardSet {
 	 * @param result
 	 * @return
 	 */
-	private int countSameChess(Chess chess, int offsetX, int offsetY, int chessBoardSize, int result) {
+	public int countSameChess(Chess chess, int offsetX, int offsetY, int chessBoardSize, int result) {
 		int _x = chess.x + offsetX;
 		if(_x<0 || _x >= chessBoardSize) {
 			return result;

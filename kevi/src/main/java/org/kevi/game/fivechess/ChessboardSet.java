@@ -20,4 +20,6 @@ public abstract class ChessboardSet {
 	public boolean isBlankChess(int x, int y) {
 		return getChess(x, y) == null;
 	}
+	
+	public abstract int countSameChess(Chess chess, int offsetX, int offsetY, int chessBoardSize, int result);
 }

@@ -23,4 +23,5 @@ public abstract class Chess {
 		return name.equals(chess.name);
 	}
 	public abstract void paint(Chessboard chessboard);
+	public abstract Chess clone();
 }

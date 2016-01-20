@@ -25,5 +25,17 @@ public class MapChessboardSet extends ChessboardSet {
 	public void removeChess(Chess chess) {
 		removeChess(chess.x, chess.y);
 	}
+	@Override
+	public ChessboardSet clone() {
+		MapChessboardSet newSet = new MapChessboardSet();
+		for (int i = 0; i < chessBoardSize; i++) {
+			for (int j = 0; j < chessBoardSize; j++) {
+				if(!isBlankChess(j, i)) {
+					newSet.addChess(getChess(j, i).clone());
+				}
+			}
+		}
+		return newSet;
+	}
 
 }

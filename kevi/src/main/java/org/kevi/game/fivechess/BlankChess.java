@@ -16,4 +16,12 @@ public class BlankChess extends Chess{
 		chessboard.gc.drawLine(pixelX, pixelY+size/2, pixelX+size, pixelY+size/2);
 		chessboard.gc.drawLine(pixelX+size/2, pixelY, pixelX+size/2, pixelY+size);
 	}
+	public Chess clone() {
+		BlankChess c = new BlankChess(size);
+		c.x = x;
+		c.y = y;
+		c.pixelX = pixelX;
+		c.pixelY = pixelY;
+		return c;
+	}
 }

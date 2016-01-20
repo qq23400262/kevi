@@ -32,6 +32,7 @@ public abstract class ChessboardSet {
 	public abstract Chess getChess(int x, int y);
 	public abstract void removeChess(int x, int y);
 	public abstract void removeChess(Chess chess);
+	public abstract ChessboardSet clone();
 	int[][] lines = {{-1, -1, 1, 1},{1, -1, -1, 1},{-1, 0, 1, 0},{0, -1, 0, 1}};//"米"字方向递增减扫描
 	public boolean isBlankChess(int x, int y) {
 		return getChess(x, y) == null;
@@ -184,4 +185,5 @@ public abstract class ChessboardSet {
 		}
 		return posValue[chess.x][chess.y];
 	}
+	
 }

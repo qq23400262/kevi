@@ -11,4 +11,13 @@ public class BlackChess extends Chess{
 		chessboard.gc.setBackground(chessboard.shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		chessboard.gc.fillOval(pixelX, pixelY, size, size);
 	}
+	
+	public Chess clone() {
+		BlackChess c = new BlackChess(size);
+		c.x = x;
+		c.y = y;
+		c.pixelX = pixelX;
+		c.pixelY = pixelY;
+		return c;
+	}
 }

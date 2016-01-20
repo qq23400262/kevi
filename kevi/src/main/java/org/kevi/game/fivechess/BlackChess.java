@@ -7,8 +7,7 @@ public class BlackChess extends Chess{
 		super("黑棋", gridSize);
 	}
 	
-	public void paint(Chessboard chessboard,int x, int y) {
-		updateXY(x, y,chessboard.gridSize);
+	public void paint(Chessboard chessboard) {
 		chessboard.gc.setBackground(chessboard.shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		chessboard.gc.fillOval(pixelX, pixelY, size, size);
 	}

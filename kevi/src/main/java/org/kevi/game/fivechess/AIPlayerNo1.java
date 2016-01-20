@@ -5,46 +5,46 @@ import java.util.Random;
 public class AIPlayerNo1 implements AIPlayer {
 	Chessboard chessboard;
 	Random r = new Random();
+	Chess testWhiteChess;
+	Chess testBlackChess;
 	public AIPlayerNo1(Chessboard chessboard) {
 		this.chessboard = chessboard;
+		testWhiteChess = ChessFactory.produceWhiteChess(chessboard.chessSize);
+		testBlackChess = ChessFactory.produceBlackChess(chessboard.chessSize);
 	}
-	//位置重要性价值表,此表从中间向外,越往外价值越低
-	int[][] posValue = {
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
-			{0,1,2,2,2,2,2,2,2,2,2,2,2,1,0},
-			{0,1,2,3,3,3,3,3,3,3,3,3,2,1,0},
-			{0,1,2,3,4,4,4,4,4,4,4,3,2,1,0},
-			{0,1,2,3,4,5,5,5,5,5,4,3,2,1,0},
-			{0,1,2,3,4,5,6,6,6,5,4,3,2,1,0},
-			{0,1,2,3,4,5,6,7,6,5,4,3,2,1,0},
-			{0,1,2,3,4,5,6,6,6,5,4,3,2,1,0},
-			{0,1,2,3,4,5,5,5,5,5,4,3,2,1,0},
-			{0,1,2,3,4,4,4,4,4,4,4,3,2,1,0},
-			{0,1,2,3,3,3,3,3,3,3,3,3,2,1,0},
-			{0,1,2,2,2,2,2,2,2,2,2,2,2,1,0},
-			{0,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-		};
+	
 	@Override
-	public void putChess() {
-		int step = chessboard.stepStack.size();
-		if(step==1) {
-			putByPosValue();
-			return;
-		}
-		int allStep = chessboard.size * chessboard.size;
-		int leave = allStep - step;
-		int index = new Random().nextInt(leave);
+	public Chess getBeastChess() {
+		//chessboard.putChess(j, i);
+		int score = 0;
+		int _score = 0;
+		int _score1 = 0;
+		int ii = 0;
+		int jj = 0;
 		for (int i = 0; i < chessboard.size; i++) {
 			for (int j = 0; j < chessboard.size; j++) {
-				index--;
-				if(index==0) {
-					chessboard.putChess(j, i);
+				if(chessboard.cbSet.isBlankChess(j, i)) {
+					testWhiteChess.setXY(j, i, chessboard.gridSize);
+					testBlackChess.setXY(j, i, chessboard.gridSize);
+					_score = chessboard.cbSet.evlation(testWhiteChess, true);
+					_score1 = -chessboard.cbSet.evlation(testBlackChess, false);
+					if(score < _score) {
+						ii = i;
+						jj = j;
+						score = _score;
+					} else if(score < _score1) {
+						ii = i;
+						jj = j;
+						score = _score1;
+					}
 				}
+				
 			}
 		}
-		//chessboard.
+		System.out.println("白棋分数:"+score+",黑棋分数:"+_score1);
+		Chess chess = ChessFactory.produceWhiteChess(chessboard.chessSize);
+		chess.setXY(jj, ii, chessboard.gridSize);
+		return chess;
 	}
 	
 //	public static void main(String[] args) {
@@ -73,13 +73,13 @@ public class AIPlayerNo1 implements AIPlayer {
 		return 0;
 	}
 	
-//	public boolean isTow(int x, int y) {
-//		//注：x对j,y对i
-//		for (int i = 0; i < chessboard.size; i++) {
-//			for (int j = 0; j < chessboard.size; j++) {
-//				chessboard.cbSet.countSameChess(chess, offsetX, offsetY, chessBoardSize, result);
-//			}
-//		}
-//	}
+	/**
+	 * 评价棋盘分数
+	 * @param node
+	 * @return
+	 */
+	public int evaluate(ChessboardSet node) {
+		return 0;
+	}
 
 }

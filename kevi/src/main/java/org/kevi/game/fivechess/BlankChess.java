@@ -10,8 +10,7 @@ public class BlankChess extends Chess{
 	public BlankChess(int gridSize) {
 		super("无棋子", gridSize);
 	}
-	public void paint(Chessboard chessboard,int x, int y) {
-		updateXY(x, y,chessboard.gridSize);
+	public void paint(Chessboard chessboard) {
 		chessboard.gc.setBackground(chessboard.canvas.getBackground());
 		chessboard.gc.fillOval(pixelX, pixelY, size, size);
 		chessboard.gc.drawLine(pixelX, pixelY+size/2, pixelX+size, pixelY+size/2);

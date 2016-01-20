@@ -6,8 +6,7 @@ public class WhiteChess extends Chess{
 	public WhiteChess(int size) {
 		super("白棋", size);
 	}
-	public void paint(Chessboard chessboard,int x, int y) {
-		updateXY(x, y,chessboard.gridSize);
+	public void paint(Chessboard chessboard) {
 		chessboard.gc.setBackground(chessboard.shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		chessboard.gc.fillOval(pixelX, pixelY, size, size);
 	}

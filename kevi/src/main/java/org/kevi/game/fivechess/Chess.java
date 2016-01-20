@@ -13,7 +13,7 @@ public abstract class Chess {
 		this.name = name;
 	}
 	
-	public void updateXY(int x, int y ,int gridSize) {
+	public void setXY(int x, int y ,int gridSize) {
 		this.x = x;
 		this.y = y;
 		pixelX = x * gridSize-size/2;
@@ -22,5 +22,5 @@ public abstract class Chess {
 	public boolean equals(Chess chess) {
 		return name.equals(chess.name);
 	}
-	public abstract void paint(Chessboard chessboard,int x, int y);
+	public abstract void paint(Chessboard chessboard);
 }

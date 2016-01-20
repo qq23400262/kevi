@@ -8,18 +8,180 @@ package org.kevi.game.fivechess;
  *
  */
 public abstract class ChessboardSet {
-	public abstract void addChess(Chess chess, int x, int y);
+	//位置重要性价值表,此表从中间向外,越往外价值越低
+	int[][] posValue = {
+			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
+			{0,1,2,2,2,2,2,2,2,2,2,2,2,1,0},
+			{0,1,2,3,3,3,3,3,3,3,3,3,2,1,0},
+			{0,1,2,3,4,4,4,4,4,4,4,3,2,1,0},
+			{0,1,2,3,4,5,5,5,5,5,4,3,2,1,0},
+			{0,1,2,3,4,5,6,6,6,5,4,3,2,1,0},
+			{0,1,2,3,4,5,6,7,6,5,4,3,2,1,0},
+			{0,1,2,3,4,5,6,6,6,5,4,3,2,1,0},
+			{0,1,2,3,4,5,5,5,5,5,4,3,2,1,0},
+			{0,1,2,3,4,4,4,4,4,4,4,3,2,1,0},
+			{0,1,2,3,3,3,3,3,3,3,3,3,2,1,0},
+			{0,1,2,2,2,2,2,2,2,2,2,2,2,1,0},
+			{0,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+		};
+	static final int winCount = 5;
+	static final int chessBoardSize = 15;
+	public abstract void addChess(Chess chess);
 	public abstract Chess getChess(int x, int y);
 	public abstract void removeChess(int x, int y);
 	public abstract void removeChess(Chess chess);
-	/**
-	 * 根据最后一个子判断游戏是否结束
-	 * @param chess
-	 */
-	public abstract boolean isGameOver(Chess chess, int chessBoardSize);
+	int[][] lines = {{-1, -1, 1, 1},{1, -1, -1, 1},{-1, 0, 1, 0},{0, -1, 0, 1}};//"米"字方向递增减扫描
 	public boolean isBlankChess(int x, int y) {
 		return getChess(x, y) == null;
 	}
 	
-	public abstract int countSameChess(Chess chess, int offsetX, int offsetY, int chessBoardSize, int result);
+	/**
+	 * 向某个方向统计相同颜色的棋子
+	 * @param chess
+	 * @param offsetX -1,0,1
+	 * @param offsetY -1,0,1
+	 * @param result
+	 * @return
+	 */
+	public int[] countSameChess(Chess chess, int offsetX, int offsetY, int result) {
+		int _x = chess.x + offsetX;
+		if(_x<0 || _x >= chessBoardSize) {
+			int[] r = {result, 0};//0代表端点不能放棋子了
+			return r;
+		}
+		int _y = chess.y + offsetY;
+		if(_y<0 || _y >= chessBoardSize) {
+			int[] r = {result, 0};//0代表端点不能放棋子了
+			return r;
+		}
+		Chess _chess = getChess(_x, _y);
+		if(_chess == null) {
+			int[] r = {result, 1};//1代表可以放棋子
+			return r;
+		} else if(!_chess.equals(chess)) {
+			int[] r = {result, 0};//0代表端点不能放棋子了
+			return r;
+		}
+		result++;
+		return countSameChess(_chess, offsetX, offsetY, result);
+	}
+	/**
+	 * 根据最后一个子判断游戏是否结束
+	 * @param chess
+	 */
+	public boolean isGameOver(Chess chess) {
+		for (int[] ls : lines) {
+			int count1 = countSameChess(chess, ls[0], ls[1], 0)[0];
+			int count2 = countSameChess(chess, ls[2], ls[3], 0)[0];
+			if(count1 + count2 + 1 >= winCount) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * 
+	 * @param chess
+	 * @param chessBoardSize 这个参数可以说没用，因为五子棋是固定15*15的
+	 * @return
+	 */
+	public int evlation(Chess chess, boolean isAI) {
+		int score = 0;
+		int nearCount = 0;
+		int blankCount = 0;
+		int blankCount4_2 = 0;
+		int blankCount4_1 = 0;
+		int blankCount3_2 = 0;
+		int blankCount3_1 = 0;
+		int blankCount2_2 = 0;
+		int blankCount2_1 = 0;
+		for (int[] ls : lines) {
+			nearCount = 1 + countSameChess(chess, ls[0], ls[1], 0)[0] + countSameChess(chess, ls[2], ls[3], 0)[0];
+			blankCount = countSameChess(chess, ls[0], ls[1], 0)[1] + countSameChess(chess, ls[2], ls[3], 0)[1];
+//			System.out.println(nearCount+","+blankCount);
+			//判断是否能成5,   如果是机器方的话给予100000分，如果是人方的话给予－100000   分；
+			if(nearCount >= winCount) {
+				score = 100000;
+				score = isAI?score:-score;
+				return score;
+			} else {
+				if(nearCount == 4 && blankCount==2) {
+					blankCount4_2++;
+				} else if(nearCount == 4 && blankCount==1) {
+					blankCount4_1++;
+				} else if(nearCount == 3 && blankCount==2) {
+					blankCount3_2++;
+				} else if(nearCount == 3 && blankCount==1) {
+					blankCount3_1++;
+				} else if(nearCount == 2 && blankCount==2) {
+					blankCount2_2++;
+				} else if(nearCount == 2 && blankCount==1) {
+					blankCount2_1++;
+				}
+			}
+		}
+		//判断是否能成活4或者是双死4或者是死4活3，如果是机器方的话给予10000分，如果是人方的话给予－10000分；
+		if(blankCount4_2>0 || blankCount4_1 >= 2 || (blankCount4_1>=1&&blankCount3_2>0)) {
+			score = 10000;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否已成双活3，如果是机器方的话给予5000分，如果是人方的话给予－5000   分；
+		if(blankCount3_2==4) {
+			score = 5000;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否成死3活3，如果是机器方的话给予1000分，如果是人方的话给予－1000   分；   
+		if(blankCount3_1>0 && blankCount3_2==2) {
+			score = 1000;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否能成死4，如果是机器方的话给予500分，如果是人方的话给予－500分；     
+		if(blankCount4_1>0) {
+			score = 500;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否能成单活3，如果是机器方的话给予200分，如果是人方的话给予－200分；    
+		if(blankCount3_2==1) {
+			score = 200;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否已成双活2，如果是机器方的话给予100分，如果是人方的话给予－100分；
+		if(blankCount2_2==4) {
+			score = 100;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否能成死3，如果是机器方的话给予60分，如果是人方的话给予－60分； 
+		if(blankCount3_1>0) {
+			score = 60;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否能成双活2，如果是机器方的话给予20分，如果是人方的话给予－20分；
+		if(blankCount2_2==2) {
+			score = 20;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否能成活2，如果是机器方的话给予15分，如果是人方的话给予－15分；
+		if(blankCount2_2>0) {
+			score = 5;
+			score = isAI?score:-score;
+			return score;
+		}
+		//判断是否能成死2，如果是机器方的话给予13分，如果是人方的话给予－13分。
+		if(blankCount2_1>0) {
+			score = 3;
+			score = isAI?score:-score;
+			return score;
+		}
+		return posValue[chess.x][chess.y];
+	}
 }

@@ -28,7 +28,7 @@ public class Chessboard {
 	protected Shell shell;
 	Canvas canvas;
 	Label infoLabel;
-	int size = 15;//棋盘为15*15大小
+	int size = 14;//棋盘为15*15大小
 	int gridSize = 0;
 	int chessSize = 0;
 	boolean isTurnBlack = true;//用来标记到谁下棋了，五子棋一般规定黑子先下，所以defaul值是true
@@ -70,7 +70,7 @@ public class Chessboard {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(531, 568);
+		shell.setSize(501, 538);
 		shell.setText("SWT Application");
 		shell.setLayout(null);
 		
@@ -126,7 +126,7 @@ public class Chessboard {
 				putChess(pixel2GridIndex(e.x), pixel2GridIndex(e.y));
 			}
 		});
-		canvas.setBounds(30, 30, 451, 451);//宽度最好是size(15)的倍数+1
+		canvas.setBounds(30, 30, 421, 421);//宽度最好是size(14)的倍数+1，只有14格
 		gc = new GC(canvas);
 		canvas.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
@@ -173,15 +173,21 @@ public class Chessboard {
 			return;
 		}
 		Chess chess = ChessFactory.producChess(isTurnBlack, chessSize);
+		chess.setXY(x, y, gridSize);
+		putChess(chess);
+		if(!isGameOver && isTurnBlack==false) {
+			Chess bestChess = pleryer.getBeastChess();
+			putChess(bestChess);
+		}
+	}
+	
+	public void putChess(Chess chess) {
 		stepStack.push(chess);
-		cbSet.addChess(chess, x, y);
-		chess.paint(this, x, y);
-		isGameOver = cbSet.isGameOver(chess, size);
+		cbSet.addChess(chess);
+		chess.paint(this);
+		isGameOver = cbSet.isGameOver(chess);
 		isTurnBlack = !isTurnBlack;
 		updateStatus();
-		if(isTurnBlack==false) {
-			pleryer.putChess();
-		}
 	}
 	
 	public void updateStatus() {
@@ -199,13 +205,13 @@ public class Chessboard {
 	public void retractChess() {
 		if(isGameOver)return;
 		if(stepStack.isEmpty()) {
-			System.out.println("已经回到头了");
-			return;
+			return;//已经没有棋可回了
 		}
 		Chess chess = stepStack.pop();
 		cbSet.removeChess(chess);
 		Chess tmpChess = ChessFactory.produceBlankChess(chessSize);
-		tmpChess.paint(this, chess.x, chess.y);
+		tmpChess.setXY(chess.x, chess.y, gridSize);
+		tmpChess.paint(this);
 		chess = null;
 		isTurnBlack = !isTurnBlack;
 		updateStatus();

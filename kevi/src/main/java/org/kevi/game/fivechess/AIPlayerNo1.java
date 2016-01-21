@@ -12,10 +12,9 @@ public class AIPlayerNo1 implements AIPlayer {
 		testWhiteChess = ChessFactory.produceWhiteChess(chessboard.chessSize);
 		testBlackChess = ChessFactory.produceBlackChess(chessboard.chessSize);
 	}
-	
+
 	@Override
 	public Chess getBeastChess() {
-		//chessboard.putChess(j, i);
 		int score = 0;
 		int _score = 0;
 		int _score1 = 0;
@@ -47,11 +46,6 @@ public class AIPlayerNo1 implements AIPlayer {
 		return chess;
 	}
 	
-//	public static void main(String[] args) {
-//		for (int i = 0; i < 10; i++) {
-//			System.out.println(new Random().nextInt(3)-1);
-//		}
-//	}
 	public void putByPosValue() {
 		int x = 7;
 		int y = 7;
@@ -67,19 +61,6 @@ public class AIPlayerNo1 implements AIPlayer {
 			_y = new Random().nextInt(3)-1;
 		}
 		chessboard.putChess(x+_x, y+_x);
-	}
-	
-	public int eveluate() {
-		return 0;
-	}
-	
-	/**
-	 * 评价棋盘分数
-	 * @param node
-	 * @return
-	 */
-	public int evaluate(ChessboardSet node) {
-		return 0;
 	}
 
 }

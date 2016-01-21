@@ -114,7 +114,7 @@ public class Chessboard {
 		cbSet = new MapChessboardSet();
 		isGameOver = false;
 		isTurnBlack = true;
-		pleryer = new AIPlayerNo1(this);
+		pleryer = new AIPlayerNo2(this);
 		updateStatus();
 	}
 	
@@ -132,6 +132,8 @@ public class Chessboard {
 			public void paintControl(PaintEvent e) {
 				//画棋盘
 				paintChessBoard(gc);
+				//画棋子
+				paintChess();
 			}
 		});
 		canvas.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
@@ -143,6 +145,22 @@ public class Chessboard {
 		start();
 	}
 	
+	/**
+	 * 画棋子
+	 */
+	public void paintChess() {
+		if(cbSet != null) {
+			Chess _chess;
+			for (int i = 0; i <= size; i++) {
+				for(int j = 0; j <= size; j++) {
+					_chess = cbSet.getChess(j, i);
+					if(_chess != null) {
+						_chess.paint(this);
+					}
+				}
+			}
+		}
+	}
 	/**
 	 * 画棋盘
 	 * @param gc
@@ -184,6 +202,19 @@ public class Chessboard {
 	public void putChess(Chess chess) {
 		stepStack.push(chess);
 		cbSet.addChess(chess);
+		if(isTurnBlack) {
+			//显示白棋分数
+			cbSet.evlation(chess, false);
+			Chess _chess = ChessFactory.produceWhiteChess(chessSize);
+			_chess.setXY(chess.x, chess.y, gridSize);
+			System.out.println("黑棋:"+cbSet.evlation(chess, false)+",白棋:"+cbSet.evlation(_chess, true));
+		} else {
+			Chess _black = ChessFactory.produceBlackChess(chessSize);
+			_black.setXY(chess.x, chess.y, gridSize);
+			System.out.println("白棋:"+cbSet.evlation(chess, true)+",黑棋:"+cbSet.evlation(_black, false));
+		}
+		
+//		System.out.println("白棋分数:"+_score+",黑棋分数:"+_score1);
 		chess.paint(this);
 		isGameOver = cbSet.isGameOver(chess);
 		isTurnBlack = !isTurnBlack;

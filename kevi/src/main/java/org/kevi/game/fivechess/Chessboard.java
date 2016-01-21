@@ -86,7 +86,7 @@ public class Chessboard {
 		cbSet = new MapChessboardSet();
 		isGameOver = false;
 		isTurnBlack = true;
-		pleryer = new AIPlayerNo2(this);
+		pleryer = new AIPlayerNo3(this);
 		updateStatus();
 	}
 	/**
@@ -145,7 +145,6 @@ public class Chessboard {
 		infoLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
 		infoLabel.setBounds(464, 304, 156, 54);
 		gridSize = 26;
-		System.out.println(gridSize);
 		chessSize = gridSize - 2;//棋子大小比gridSize小4像素
 		start();
 	}

@@ -95,7 +95,7 @@ public class TestAlphaBeta {
 		        return α;
 		    }  else { // 极小节点
 		        for (Node child : node.childs) { // 极大节点
-		            β = Math.min(β, alphaBeta(child, depth-1, α, β, !isTurnBlack)); // 极小节点
+		            β = Math.min(β, alphaBeta(child, depth-1, α, β, isTurnBlack)); // 极小节点
 		            if (β <= α) // 该极大节点的值<=β<=α，该极小节点后面的搜索到的值肯定会小于α，因此不会被其上层的极大节点所选用了。对于根节点，α为负无穷
 		                break;
 		        }

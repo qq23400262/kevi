@@ -12,6 +12,8 @@ public class WhiteChess extends Chess{
 //		chessboard.gc.drawImage(image,pixelX,pixelY);
 		chessboard.gc.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		chessboard.gc.fillOval(pixelX, pixelY, size, size);
+//		chessboard.gc.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+//		chessboard.gc.drawOval(pixelX, pixelY, size, size);
 	}
 	public Chess clone() {
 		WhiteChess c = new WhiteChess(size);

@@ -6,20 +6,18 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.layout.FillLayout;
 
 /**
  * 五子棋棋盘类
@@ -144,6 +142,7 @@ public class Chessboard {
 		btnNewButton_1.setText("悔棋");
 		
 		infoLabel = new Label(canvas, SWT.NONE);
+		infoLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
 		infoLabel.setBounds(464, 304, 156, 54);
 		gridSize = 26;
 		System.out.println(gridSize);
@@ -173,8 +172,8 @@ public class Chessboard {
 	 */
 	public void paintChessBoard(GC gc) {
 		
-		Image image = SWTResourceManager.getImage(this.getClass(), "background.png");
-		gc.drawImage(image, 0, 0);
+//		Image image = SWTResourceManager.getImage(this.getClass(), "background.png");
+//		gc.drawImage(image, 0, 0);
 		int orgin = 56;
 		gc.setForeground(SWTResourceManager.getColor(114, 92, 53));
 		for (int i = 0; i <= size; i++) {
@@ -186,6 +185,12 @@ public class Chessboard {
 			gc.drawLine(0+orgin, i*gridSize+orgin, size*gridSize+orgin, i*gridSize+orgin);
 			gc.drawLine(i*gridSize+orgin, 0+orgin, i*gridSize+orgin, size*gridSize+orgin);
 		}
+		gc.setBackground(SWTResourceManager.getColor(114, 92, 53));
+		gc.fillOval(7*gridSize+orgin-5, 7*gridSize+orgin-5, 10, 10);
+		gc.fillOval(3*gridSize+orgin-5, 3*gridSize+orgin-5, 10, 10);
+		gc.fillOval(3*gridSize+orgin-5, 11*gridSize+orgin-5, 10, 10);
+		gc.fillOval(11*gridSize+orgin-5, 3*gridSize+orgin-5, 10, 10);
+		gc.fillOval(11*gridSize+orgin-5, 11*gridSize+orgin-5, 10, 10);
 	}
 	
 	

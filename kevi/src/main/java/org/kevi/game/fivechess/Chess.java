@@ -16,8 +16,8 @@ public abstract class Chess {
 	public void setXY(int x, int y ,int gridSize) {
 		this.x = x;
 		this.y = y;
-		pixelX = x * gridSize-size/2;
-		pixelY = y * gridSize-size/2;
+		pixelX = x * gridSize-size/2+57;
+		pixelY = y * gridSize-size/2+56;
 	}
 	public boolean equals(Chess chess) {
 		return name.equals(chess.name);

@@ -6,18 +6,20 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.layout.FillLayout;
 
 /**
  * 五子棋棋盘类
@@ -70,36 +72,8 @@ public class Chessboard {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(501, 538);
+		shell.setSize(664, 510);
 		shell.setText("SWT Application");
-		shell.setLayout(null);
-		
-		Menu menu = new Menu(shell, SWT.BAR);
-		shell.setMenuBar(menu);
-		
-		MenuItem gameMenu = new MenuItem(menu, SWT.CASCADE);
-		gameMenu.setText("菜单");
-		
-		Menu gameMenuList = new Menu(gameMenu);
-		gameMenu.setMenu(gameMenuList);
-		
-		MenuItem reStartMenu = new MenuItem(gameMenuList, SWT.NONE);
-		reStartMenu.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				start();
-			}
-		});
-		reStartMenu.setText("重新开始");
-		
-		MenuItem retractMenu = new MenuItem(gameMenuList, SWT.NONE);
-		retractMenu.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				retractChess();
-			}
-		});
-		retractMenu.setText("悔棋");
 		initCanvas();
 	}
 	
@@ -117,16 +91,27 @@ public class Chessboard {
 		pleryer = new AIPlayerNo2(this);
 		updateStatus();
 	}
-	
+	/**
+	 * 主要是把x,y鼠标坐标转化成格子数
+	 * @return
+	 */
+	private int pixel2GridIndex(int px) {
+		return (px+gridSize/2)/gridSize;
+	}
 	public void initCanvas() {
+		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		canvas = new Canvas(shell, SWT.NONE);
+//		canvas.addMouseMoveListener(new MouseMoveListener() {
+//			public void mouseMove(MouseEvent e) {
+//				System.out.println(e.x+","+e.y);
+//			}
+//		});
 		canvas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				putChess(pixel2GridIndex(e.x), pixel2GridIndex(e.y));
+				putChess(pixel2GridIndex(e.x-57), pixel2GridIndex(e.y-56));
 			}
 		});
-		canvas.setBounds(30, 30, 421, 421);//宽度最好是size(14)的倍数+1，只有14格
 		gc = new GC(canvas);
 		canvas.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
@@ -138,10 +123,31 @@ public class Chessboard {
 		});
 		canvas.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
 		
-		infoLabel = new Label(shell, SWT.NONE);
-		infoLabel.setBounds(30, 10, 230, 17);
-		gridSize = canvas.getBounds().width/size;
-		chessSize = gridSize - 4;//棋子大小比gridSize小4像素
+		Button btnNewButton = new Button(canvas, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				start();
+			}
+		});
+		btnNewButton.setBounds(464, 141, 156, 40);
+		btnNewButton.setText("重新开始");
+		
+		Button btnNewButton_1 = new Button(canvas, SWT.NONE);
+		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				retractChess();
+			}
+		});
+		btnNewButton_1.setBounds(464, 197, 156, 40);
+		btnNewButton_1.setText("悔棋");
+		
+		infoLabel = new Label(canvas, SWT.NONE);
+		infoLabel.setBounds(464, 304, 156, 54);
+		gridSize = 26;
+		System.out.println(gridSize);
+		chessSize = gridSize - 2;//棋子大小比gridSize小4像素
 		start();
 	}
 	
@@ -166,19 +172,22 @@ public class Chessboard {
 	 * @param gc
 	 */
 	public void paintChessBoard(GC gc) {
+		
+		Image image = SWTResourceManager.getImage(this.getClass(), "background.png");
+		gc.drawImage(image, 0, 0);
+		int orgin = 56;
+		gc.setForeground(SWTResourceManager.getColor(114, 92, 53));
 		for (int i = 0; i <= size; i++) {
-			gc.drawLine(0, i*gridSize, size*gridSize, i*gridSize);
-			gc.drawLine(i*gridSize, 0, i*gridSize, size*gridSize);
+			if(i==0 || i==size) {
+				gc.setLineWidth(2);
+			} else {
+				gc.setLineWidth(1);
+			}
+			gc.drawLine(0+orgin, i*gridSize+orgin, size*gridSize+orgin, i*gridSize+orgin);
+			gc.drawLine(i*gridSize+orgin, 0+orgin, i*gridSize+orgin, size*gridSize+orgin);
 		}
 	}
 	
-	/**
-	 * 主要是把x,y鼠标坐标转化成格子数
-	 * @return
-	 */
-	private int pixel2GridIndex(int px) {
-		return (px+gridSize/2)/gridSize;
-	}
 	
 	/**
 	 * 放一个棋子
@@ -186,6 +195,7 @@ public class Chessboard {
 	 * @param y 相对canvas的鼠标y坐标
 	 */
 	public void putChess(int x, int y) {
+		if(x < 0 || x > size || y < 0 || y>size)return;
 		if(isGameOver)return;
 		if(!cbSet.isBlankChess(x, y)) {
 			return;

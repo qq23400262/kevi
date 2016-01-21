@@ -13,8 +13,29 @@ public class BlankChess extends Chess{
 	public void paint(Chessboard chessboard) {
 		chessboard.gc.setBackground(chessboard.canvas.getBackground());
 		chessboard.gc.fillOval(pixelX, pixelY, size, size);
-		chessboard.gc.drawLine(pixelX, pixelY+size/2, pixelX+size, pixelY+size/2);
-		chessboard.gc.drawLine(pixelX+size/2, pixelY, pixelX+size/2, pixelY+size);
+		chessboard.gc.setLineWidth(1);
+		int x0 = pixelX;
+		int y0 = pixelY+size/2;
+		int x1 = pixelX+size;
+		int y1 = pixelY+size/2;
+		if(x==0) {
+			x0 += size/2;
+		}
+		if(x==chessboard.size) {
+			x1 -= size/2+2;
+		}
+		chessboard.gc.drawLine(x0, y0, x1, y1);//横
+		int x2 = pixelX+size/2-1;
+		int y2 = pixelY;
+		int x3 = pixelX+size/2-1;
+		int y3 = pixelY+size/2;
+		if(y==chessboard.size) {
+			y3 -= size/2;
+		}
+		if(y==0) {
+			y2 += size/2;
+		}
+		chessboard.gc.drawLine(x2, y2, x3, y3);//竖
 	}
 	public Chess clone() {
 		BlankChess c = new BlankChess(size);

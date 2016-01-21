@@ -28,7 +28,61 @@ public abstract class ChessboardSet {
 		};
 	static final int winCount = 5;
 	static final int chessBoardSize = 15;
-	public abstract void addChess(Chess chess);
+	int x0=6,y0=6,x1=8,y1=8;
+	public int getX0() {
+		return x0;
+	}
+	public void setX0(int x0) {
+		this.x0 = x0;
+	}
+	public int getY0() {
+		return y0;
+	}
+	public void setY0(int y0) {
+		this.y0 = y0;
+	}
+	public int getX1() {
+		return x1;
+	}
+	public void setX1(int x1) {
+		this.x1 = x1;
+	}
+	public int getY1() {
+		return y1;
+	}
+	public void setY1(int y1) {
+		this.y1 = y1;
+	}
+	public void addChess(Chess chess) {
+		subAddChess(chess);
+		int aiSize = 2;
+		if(x0 > chess.x - aiSize) {
+			x0 = chess.x - aiSize;
+			if(x0 < 0) {
+				x0 = 0;
+			}
+		}
+		if(y0 > chess.y - aiSize) {
+			y0 = chess.y - aiSize;
+			if(y0 < 0) {
+				y0 = 0;
+			}
+		}
+		if(x1 < chess.x + aiSize) {
+			x1 = chess.x + aiSize;
+			if(x1 >= chessBoardSize) {
+				x1 = chessBoardSize-1;
+			}
+		}
+		if(y1 < chess.y + aiSize) {
+			y1 = chess.y + aiSize;
+			if(y1 >= chessBoardSize) {
+				y1 = chessBoardSize-1;
+			}
+		}
+	}
+	public abstract void subAddChess(Chess chess);
+	public abstract Chess getLastChess();
 	public abstract Chess getChess(int x, int y);
 	public abstract void removeChess(int x, int y);
 	public abstract void removeChess(Chess chess);
@@ -104,7 +158,7 @@ public abstract class ChessboardSet {
 //			System.out.println(nearCount+","+blankCount);
 			//判断是否能成5,   如果是机器方的话给予100000分，如果是人方的话给予－100000   分；
 			if(nearCount >= winCount) {
-				score = 100000;
+				score = 100000+posValue[chess.x][chess.y];
 				score = isAI?score:-score;
 				return score;
 			} else {
@@ -125,65 +179,71 @@ public abstract class ChessboardSet {
 		}
 		//判断是否能成活4或者是双死4或者是死4活3，如果是机器方的话给予10000分，如果是人方的话给予－10000分；
 		if(blankCount4_2>0 || blankCount4_1 >= 2 || (blankCount4_1>=1&&blankCount3_2>0)) {
-			score = 10000;
+			score = 10000+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否已成双活3，如果是机器方的话给予5000分，如果是人方的话给予－5000   分；
 		if(blankCount3_2==4) {
-			score = 5000;
+			score = 5000+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否成死3活3，如果是机器方的话给予1000分，如果是人方的话给予－1000   分；   
 		if(blankCount3_1>0 && blankCount3_2==2) {
-			score = 1000;
+			score = 1000+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成死4，如果是机器方的话给予500分，如果是人方的话给予－500分；     
 		if(blankCount4_1>0) {
-			score = 500;
+			score = 500+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成单活3，如果是机器方的话给予200分，如果是人方的话给予－200分；    
 		if(blankCount3_2==1) {
-			score = 200;
+			score = 200+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否已成双活2，如果是机器方的话给予100分，如果是人方的话给予－100分；
 		if(blankCount2_2==4) {
-			score = 100;
+			score = 100+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成死3，如果是机器方的话给予60分，如果是人方的话给予－60分； 
 		if(blankCount3_1>0) {
-			score = 60;
+			score = 60+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成双活2，如果是机器方的话给予20分，如果是人方的话给予－20分；
 		if(blankCount2_2==2) {
-			score = 20;
+			score = 20+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
-		//判断是否能成活2，如果是机器方的话给予15分，如果是人方的话给予－15分；
+		//判断是否能成活2，如果是机器方的话给予12分，如果是人方的话给予－12分；
 		if(blankCount2_2>0) {
-			score = 5;
+			score = 12+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
-		//判断是否能成死2，如果是机器方的话给予13分，如果是人方的话给予－13分。
+		//判断是否能成死2，如果是机器方的话给予4分，如果是人方的话给予－4分。
 		if(blankCount2_1>0) {
-			score = 3;
+			score = 4+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
-		return posValue[chess.x][chess.y];
+		score = posValue[chess.x][chess.y];
+		score = isAI?score:-score;
+		return score;
+	}
+	@Override
+	public String toString() {
+		return "ChessboardSet [x0=" + x0 + ", y0=" + y0 + ", x1=" + x1 + ", y1=" + y1 + "]";
 	}
 	
 }

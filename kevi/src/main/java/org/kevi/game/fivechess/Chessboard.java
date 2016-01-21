@@ -11,13 +11,13 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.widgets.Label;
 
 /**
  * 五子棋棋盘类
@@ -70,36 +70,8 @@ public class Chessboard {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(501, 538);
+		shell.setSize(664, 510);
 		shell.setText("SWT Application");
-		shell.setLayout(null);
-		
-		Menu menu = new Menu(shell, SWT.BAR);
-		shell.setMenuBar(menu);
-		
-		MenuItem gameMenu = new MenuItem(menu, SWT.CASCADE);
-		gameMenu.setText("菜单");
-		
-		Menu gameMenuList = new Menu(gameMenu);
-		gameMenu.setMenu(gameMenuList);
-		
-		MenuItem reStartMenu = new MenuItem(gameMenuList, SWT.NONE);
-		reStartMenu.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				start();
-			}
-		});
-		reStartMenu.setText("重新开始");
-		
-		MenuItem retractMenu = new MenuItem(gameMenuList, SWT.NONE);
-		retractMenu.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				retractChess();
-			}
-		});
-		retractMenu.setText("悔棋");
 		initCanvas();
 	}
 	
@@ -114,46 +86,9 @@ public class Chessboard {
 		cbSet = new MapChessboardSet();
 		isGameOver = false;
 		isTurnBlack = true;
-		pleryer = new AIPlayerNo1(this);
+		pleryer = new AIPlayerNo2(this);
 		updateStatus();
 	}
-	
-	public void initCanvas() {
-		canvas = new Canvas(shell, SWT.NONE);
-		canvas.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				putChess(pixel2GridIndex(e.x), pixel2GridIndex(e.y));
-			}
-		});
-		canvas.setBounds(30, 30, 421, 421);//宽度最好是size(14)的倍数+1，只有14格
-		gc = new GC(canvas);
-		canvas.addPaintListener(new PaintListener() {
-			public void paintControl(PaintEvent e) {
-				//画棋盘
-				paintChessBoard(gc);
-			}
-		});
-		canvas.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
-		
-		infoLabel = new Label(shell, SWT.NONE);
-		infoLabel.setBounds(30, 10, 230, 17);
-		gridSize = canvas.getBounds().width/size;
-		chessSize = gridSize - 4;//棋子大小比gridSize小4像素
-		start();
-	}
-	
-	/**
-	 * 画棋盘
-	 * @param gc
-	 */
-	public void paintChessBoard(GC gc) {
-		for (int i = 0; i <= size; i++) {
-			gc.drawLine(0, i*gridSize, size*gridSize, i*gridSize);
-			gc.drawLine(i*gridSize, 0, i*gridSize, size*gridSize);
-		}
-	}
-	
 	/**
 	 * 主要是把x,y鼠标坐标转化成格子数
 	 * @return
@@ -161,6 +96,103 @@ public class Chessboard {
 	private int pixel2GridIndex(int px) {
 		return (px+gridSize/2)/gridSize;
 	}
+	public void initCanvas() {
+		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
+		canvas = new Canvas(shell, SWT.NONE);
+//		canvas.addMouseMoveListener(new MouseMoveListener() {
+//			public void mouseMove(MouseEvent e) {
+//				System.out.println(e.x+","+e.y);
+//			}
+//		});
+		canvas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				putChess(pixel2GridIndex(e.x-57), pixel2GridIndex(e.y-56));
+			}
+		});
+		gc = new GC(canvas);
+		canvas.addPaintListener(new PaintListener() {
+			public void paintControl(PaintEvent e) {
+				//画棋盘
+				paintChessBoard(gc);
+				//画棋子
+				paintChess();
+			}
+		});
+		canvas.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
+		
+		Button btnNewButton = new Button(canvas, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				start();
+			}
+		});
+		btnNewButton.setBounds(464, 141, 156, 40);
+		btnNewButton.setText("重新开始");
+		
+		Button btnNewButton_1 = new Button(canvas, SWT.NONE);
+		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				retractChess();
+			}
+		});
+		btnNewButton_1.setBounds(464, 197, 156, 40);
+		btnNewButton_1.setText("悔棋");
+		
+		infoLabel = new Label(canvas, SWT.NONE);
+		infoLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
+		infoLabel.setBounds(464, 304, 156, 54);
+		gridSize = 26;
+		System.out.println(gridSize);
+		chessSize = gridSize - 2;//棋子大小比gridSize小4像素
+		start();
+	}
+	
+	/**
+	 * 画棋子
+	 */
+	public void paintChess() {
+		if(cbSet != null) {
+			Chess _chess;
+			for (int i = 0; i <= size; i++) {
+				for(int j = 0; j <= size; j++) {
+					_chess = cbSet.getChess(j, i);
+					if(_chess != null) {
+						_chess.paint(this);
+					}
+				}
+			}
+		}
+	}
+	/**
+	 * 画棋盘
+	 * @param gc
+	 */
+	public void paintChessBoard(GC gc) {
+		
+//		Image image = SWTResourceManager.getImage(this.getClass(), "background.png");
+//		gc.drawImage(image, 0, 0);
+		int orgin = 56;
+		gc.setForeground(SWTResourceManager.getColor(114, 92, 53));
+		for (int i = 0; i <= size; i++) {
+			if(i==0 || i==size) {
+				gc.setLineWidth(2);
+			} else {
+				gc.setLineWidth(1);
+			}
+			gc.drawLine(0+orgin, i*gridSize+orgin, size*gridSize+orgin, i*gridSize+orgin);
+			gc.drawLine(i*gridSize+orgin, 0+orgin, i*gridSize+orgin, size*gridSize+orgin);
+		}
+		gc.setBackground(SWTResourceManager.getColor(114, 92, 53));
+		gc.fillOval(7*gridSize+orgin-5, 7*gridSize+orgin-5, 10, 10);
+		gc.fillOval(3*gridSize+orgin-5, 3*gridSize+orgin-5, 10, 10);
+		gc.fillOval(3*gridSize+orgin-5, 11*gridSize+orgin-5, 10, 10);
+		gc.fillOval(11*gridSize+orgin-5, 3*gridSize+orgin-5, 10, 10);
+		gc.fillOval(11*gridSize+orgin-5, 11*gridSize+orgin-5, 10, 10);
+	}
+	
 	
 	/**
 	 * 放一个棋子
@@ -168,6 +200,7 @@ public class Chessboard {
 	 * @param y 相对canvas的鼠标y坐标
 	 */
 	public void putChess(int x, int y) {
+		if(x < 0 || x > size || y < 0 || y>size)return;
 		if(isGameOver)return;
 		if(!cbSet.isBlankChess(x, y)) {
 			return;
@@ -184,6 +217,19 @@ public class Chessboard {
 	public void putChess(Chess chess) {
 		stepStack.push(chess);
 		cbSet.addChess(chess);
+		if(isTurnBlack) {
+			//显示白棋分数
+			cbSet.evlation(chess, false);
+			Chess _chess = ChessFactory.produceWhiteChess(chessSize);
+			_chess.setXY(chess.x, chess.y, gridSize);
+			System.out.println("黑棋:"+cbSet.evlation(chess, false)+",白棋:"+cbSet.evlation(_chess, true));
+		} else {
+			Chess _black = ChessFactory.produceBlackChess(chessSize);
+			_black.setXY(chess.x, chess.y, gridSize);
+			System.out.println("白棋:"+cbSet.evlation(chess, true)+",黑棋:"+cbSet.evlation(_black, false));
+		}
+		
+//		System.out.println("白棋分数:"+_score+",黑棋分数:"+_score1);
 		chess.paint(this);
 		isGameOver = cbSet.isGameOver(chess);
 		isTurnBlack = !isTurnBlack;

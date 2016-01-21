@@ -6,6 +6,7 @@ package org.kevi.game.fivechess;
  * http://www.cnblogs.com/pangxiaodong/archive/2011/05/26/2058864.html
  * http://wenku.baidu.com/link?url=f1tlCH4z5GPkNRPEBlYnw8JYDcnyxhhgmlj4iMTvszMx4vmj347ym6-PLolcn7ZT7-9KAW-8eKBjblYbBpnz2jK_opFY8xarmvwuumpie3C
  * http://www.docin.com/p-665121069.html
+ * http://www.it610.com/article/2238730.htm
  * @author 422575
  *
  */

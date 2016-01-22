@@ -20,7 +20,6 @@ public class AIPlayerNo3 implements AIPlayer {
 	 * @return
 	 */
 	public int evaluate(Chess chess, boolean isAI) {
-		//return isAI?cs.posValue[chess.y][chess.x]:-cs.posValue[chess.y][chess.x];
 		return cs.evlation(chess, isAI);
 	}
 	
@@ -33,9 +32,10 @@ public class AIPlayerNo3 implements AIPlayer {
 	 * @param isTurnBlack false 代表 极大节点 MaxPlayer，因为白色是AI
 	 * @return
 	 */
-	public int getMaxMin(Chess chess, int depth, int α, int β, boolean isAI) { 
-	    if (depth <= 0) { // || node is a terminal node 
-	        return evaluate(chess, isAI);
+	public int getMaxMin(Chess chess, int depth, int α, int β, boolean isAI) {
+		int score = evaluate(chess, isAI);
+	    if (Math.abs(score)==100000 || depth <= 0) { // || node is a terminal node 
+	        return score;
 		}
 		Chess _chess;
 	    if (isAI){

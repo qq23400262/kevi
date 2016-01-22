@@ -86,7 +86,7 @@ public class Chessboard {
 		cbSet = new MapChessboardSet();
 		isGameOver = false;
 		isTurnBlack = true;
-		pleryer = new AIPlayerNo2(this);
+		pleryer = new AIPlayerNo3(this);
 		updateStatus();
 	}
 	/**

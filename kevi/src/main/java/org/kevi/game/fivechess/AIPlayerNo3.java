@@ -65,9 +65,9 @@ public class AIPlayerNo3 implements AIPlayer {
 						_chess = ChessFactory.produceBlackChess(chessboard.chessSize);
 						_chess.setXY(j, i, chessboard.gridSize);
 						cs.addChess(_chess);
-						β = Math.min(α, getMaxMin(false,_chess, depth-1, α, β, !isAI));
+						β = Math.min(β, getMaxMin(false,_chess, depth-1, α, β, !isAI));
 						cs.removeChess(_chess);
-						if (β <= α) // 该极大节点的值>=α>=β，该极大节点后面的搜索到的值肯定会大于β，因此不会被其上层的极小节点所选用了。对于根节点，β为正无穷
+						if (β <= α) // 该极大节点的值<=β<=α，该极小节点后面的搜索到的值肯定会小于α，因此不会被其上层的极大节点所选用了。对于根节点，α为负无穷
 			                break;
 					}
 				}

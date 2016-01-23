@@ -134,6 +134,7 @@ public abstract class ChessboardSet {
 //			System.out.println(nearCount+","+blankCount);
 			//判断是否能成5,   如果是机器方的话给予100000分，如果是人方的话给予－100000   分；
 			if(nearCount >= winCount) {
+				System.out.println("!!!!!!!!"+chess.x+"..."+chess.y);
 				score = 100000;
 				score = isAI?score:-score;
 				return score;
@@ -219,7 +220,24 @@ public abstract class ChessboardSet {
 	}
 	@Override
 	public String toString() {
-		return "ChessboardSet [x0=" + x0 + ", y0=" + y0 + ", x1=" + x1 + ", y1=" + y1 + "]";
+//		return "ChessboardSet [x0=" + x0 + ", y0=" + y0 + ", x1=" + x1 + ", y1=" + y1 + "]";
+		String str = "";
+		Chess chess;
+		for (int i = 0; i < chessBoardSize; i++) {
+			for (int j = 0; j < chessBoardSize; j++) {
+				chess = getChess(j, i);
+				if(chess==null) {
+					str += "_";
+				} else if(chess.name.equals("黑棋")) {
+					str += "黑";
+				} else {
+					str += "白";
+				}
+			}
+			str+="\n";
+		}
+		return str;
+//		return "ChessboardSet [x0=" + x0 + ", y0=" + y0 + ", x1=" + x1 + ", y1=" + y1 + "]";
 	}
 	
 }

@@ -11,6 +11,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
@@ -86,7 +87,7 @@ public class Chessboard {
 		cbSet = new MapChessboardSet();
 		isGameOver = false;
 		isTurnBlack = true;
-		pleryer = new AIPlayerNo3(this);
+		pleryer = new AIPlayerNo1(this);
 		updateStatus();
 	}
 	/**
@@ -171,8 +172,8 @@ public class Chessboard {
 	 */
 	public void paintChessBoard(GC gc) {
 		
-//		Image image = SWTResourceManager.getImage(this.getClass(), "background.png");
-//		gc.drawImage(image, 0, 0);
+		Image image = SWTResourceManager.getImage(this.getClass(), "background.png");
+		gc.drawImage(image, 0, 0);
 		int orgin = 56;
 		gc.setForeground(SWTResourceManager.getColor(114, 92, 53));
 		for (int i = 0; i <= size; i++) {

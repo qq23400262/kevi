@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cc.wdcy.infrastructure.mybatis.CheckRecordRepositoryMyBatis">
+	<resultMap type="CheckRecord" id="checkRecordResult">
+		<result property="id" column="ID" jdbcType="INTEGER" javaType="java.lang.Integer" />
+		<result property="pilotId" column="PILOT_ID" />
+		<result property="boardingTime" column="BOARDING_TIME" />
+		<result property="checkContent" column="CHECK_CONTENT" />
+		<result property="checkStatus" column="CHECK_STATUS" />
+		<result property="checkImages" column="CHECK_IMAGES" />
+		<result property="assessors" column="ASSESSORS" />
+		<result property="acType" column="AC_TYPE" />
+		<result property="flightMinute" column="FLIGHT_MINUTE" />
+		<result property="createOn" column="CREATE_ON" />
+		<result property="createBy" column="CREATE_BY" />
+		<result property="modifyOn" column="MODIFY_ON" />
+		<result property="modifyBy" column="MODIFY_BY" />
+		<result property="ifDel" column="IF_DEL" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	
+	<select id="findCheckRecords" parameterType="CheckRecord" resultMap="checkRecordResult">
+		select * from cr_check_record where 1 = 1
+		<if test="pilotId != null">
+				and pilot_id = #{pilotId}
+		</if>
+ 	</select>
+ 	<select id="findCheckRecordById" parameterType="int" resultMap="checkRecordResult">
+		select * from cr_check_record where id=#{id}
+ 	</select>
+ 	<insert id="insertCheckRecord" parameterType="CheckRecord" keyProperty="id">
+		insert into
+		cr_check_record(pilot_id,boarding_time,check_content,check_status,check_images,assessors,ac_type,flight_minute,create_on,create_by,modify_on,modify_by,if_del,status) 
+		values(#{pilotId},#{boardingTime},#{checkContent},#{checkStatus},#{checkImages},#{assessors},#{acType},#{flightMinute},NOW(),'admin',NOW(),'admin',0,1)
+ 	</insert>
+ 	<update id="updateCheckRecord" parameterType="CheckRecord">
+		update cr_check_record set
+		pilot_id=#{pilotId},boarding_time=#{boardingTime},check_content=#{checkContent}, 
+		check_status=#{checkStatus},check_images=#{checkImages},assessors=#{assessors},
+		modify_on=now() where id=#{id}
+ 	</update>
+</mapper>

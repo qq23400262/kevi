@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cc.wdcy.infrastructure.mybatis.AirlineRepositoryMyBatis">
+	<resultMap type="Airline" id="airlineResult">
+		<result property="id" column="ID" jdbcType="INTEGER" javaType="java.lang.Integer" />
+		<result property="airline" column="AIRLINE" />
+		<result property="logo" column="LOGO" />
+		<result property="pilotNum" column="PILOT_NUM" />
+		<result property="createOn" column="CREATE_ON" />
+		<result property="createBy" column="CREATE_BY" />
+		<result property="modifyOn" column="MODIFY_ON" />
+		<result property="modifyBy" column="MODIFY_BY" />
+		<result property="ifDel" column="IF_DEL" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	
+	<select id="findAirlines" parameterType="Airline" resultMap="airlineResult">
+		select a.*,ifnull(b.pilot_num,0) as pilot_num from cr_airline a left join (
+			select airline_id,count(1) as pilot_num from cr_pilot group by airline_id
+		) b on a.id = b.airline_id
+		<if test="airline != null">
+			where a.airline like concat('%',#{airline},'%')
+		</if>
+ 	</select>
+ 	<select id="findAirlineById" parameterType="int" resultMap="airlineResult">
+		select a.*,ifnull(b.pilot_num,0) as pilot_num from cr_airline a left join (
+			select airline_id,count(1) as pilot_num from cr_pilot group by airline_id
+		) b on a.id = b.airline_id
+		where a.id=#{id}
+ 	</select>
+</mapper>

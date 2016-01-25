@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Built-By: 422575
+Build-Jdk: 1.6.0_20
+Implementation-BuildNumber: 1.0
+Implementation-Version: 1.0
+Implementation-Title: PCRS
+Created-By: Maven Integration for Eclipse
+

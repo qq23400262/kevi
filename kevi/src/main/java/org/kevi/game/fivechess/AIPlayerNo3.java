@@ -90,10 +90,9 @@ public class AIPlayerNo3 implements AIPlayer {
 					_chess = ChessFactory.produceWhiteChess(chessboard.chessSize);
 					_chess.setXY(j, i, chessboard.gridSize);
 					cs.addChess(_chess);
-					maxScore = -alphabeta(_chess, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+					_maxScore = alphabeta(_chess, 2, -Integer.MAX_VALUE, Integer.MAX_VALUE, true);
+					System.out.println(_maxScore);
 					cs.removeChess(_chess);
-					System.out.println(maxScore+"]]]]]");
-					if(maxScore!=0)
 					if(maxScore<_maxScore) {
 						ii = i;
 						jj = j;
@@ -103,7 +102,7 @@ public class AIPlayerNo3 implements AIPlayer {
 				
 			}
 		}
-//		System.out.println("getBeastChess1============="+maxScore+","+ii+","+jj);
+		System.out.println("getBeastChess1============="+maxScore+","+ii+","+jj);
 		Chess chess = ChessFactory.produceWhiteChess(chessboard.chessSize);
 		chess.setXY(jj, ii, chessboard.gridSize);
 		return chess;

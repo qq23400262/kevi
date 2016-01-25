@@ -169,7 +169,7 @@ public class TestAlphaBeta {
 		    if (isMax==true){
 		    	//极大节点
 		        for (Node1 child : node.childs) {// 极小节点
-		            α = Math.max(α, alphaBeta1(child, depth-1, α, β, false ));   
+		            α = Math.max(α, alphaBeta1(child, depth-1, α, β, true ));   
 		            System.out.println("α="+α);
 		            if (β <= α) // 该极大节点的值>=α>=β，该极大节点后面的搜索到的值肯定会大于β，因此不会被其上层的极小节点所选用了。对于根节点，β为正无穷
 		                break;
@@ -177,7 +177,7 @@ public class TestAlphaBeta {
 		        return α;
 		    }  else { // 极小节点
 		        for (Node1 child : node.childs) { // 极大节点
-		            β = Math.min(β, alphaBeta1(child, depth-1, α, β, true)); // 极小节点
+		            β = Math.min(β, alphaBeta1(child, depth-1, α, β, false)); // 极小节点
 		            if (β <= α) // 该极大节点的值<=β<=α，该极小节点后面的搜索到的值肯定会小于α，因此不会被其上层的极大节点所选用了。对于根节点，α为负无穷
 		                break;
 		        }
@@ -190,19 +190,37 @@ public class TestAlphaBeta {
 			Node1 node0 = new Node1(0,0,33);
 			Node1 node0_1 = new Node1(1,1,10);
 			Node1 node0_2 = new Node1(2,2,20);
+			Node1 node0_3 = new Node1(3,3,22);
 			
-			Node1 node0_1_1 = new Node1(3,3,-9);
-			Node1 node0_1_2 = new Node1(4,4,-3);
+			Node1 node0_1_1 = new Node1(4,4,-9);
+			Node1 node0_1_2 = new Node1(5,5,-3);
 			
-			Node1 node0_2_1 = new Node1(5,5,-1);
-			Node1 node0_2_2 = new Node1(6,6,-2);
+			Node1 node0_2_1 = new Node1(6,6,-4);
+			Node1 node0_2_2 = new Node1(7,7,-2);
 			
-			node0.addChild(node0_1).addChild(node0_2);
+			Node1 node0_3_1 = new Node1(8,8,-3);
+			Node1 node0_3_2 = new Node1(9,9,-2);
+			
+			node0.addChild(node0_1).addChild(node0_2).addChild(node0_3);
 			
 			node0_1.addChild(node0_1_1).addChild(node0_1_2);
 			node0_2.addChild(node0_2_1).addChild(node0_2_2);
-			
-			System.out.println(alphaBeta1(node0, 2, -Integer.MAX_VALUE, Integer.MAX_VALUE, true));
+			node0_3.addChild(node0_3_1).addChild(node0_3_2);
+			int score = -Integer.MAX_VALUE;
+			int _score = 0;
+			int i = -1;
+			int j = -1;
+			for (Node1 node1 : node0.childs) {
+				_score = alphaBeta1(node1, 2, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+				System.out.println("====="+_score);
+				if(score < _score) {
+					score = _score;
+					i = node1.i;
+					j = node1.j;
+				}
+			}
+			System.out.println("下一步应该走：("+i+","+j+"),对方分数="+score);
+//			System.out.println(alphaBeta1(node0, 2, -Integer.MAX_VALUE, Integer.MAX_VALUE, true));
 		}
 }
 

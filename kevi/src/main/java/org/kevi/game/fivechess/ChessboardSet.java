@@ -156,61 +156,61 @@ public abstract class ChessboardSet {
 		}
 		//判断是否能成活4或者是双死4或者是死4活3，如果是机器方的话给予10000分，如果是人方的话给予－10000分；
 		if(blankCount4_2>0 || blankCount4_1 >= 2 || (blankCount4_1>=1&&blankCount3_2>0)) {
-			score = 10000;
+			score = 10000+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否已成双活3，如果是机器方的话给予5000分，如果是人方的话给予－5000   分；
 		if(blankCount3_2==4) {
-			score = 5000;
+			score = 5000+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否成死3活3，如果是机器方的话给予1000分，如果是人方的话给予－1000   分；   
 		if(blankCount3_1>0 && blankCount3_2==2) {
-			score = 1000;
+			score = 1000+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成死4，如果是机器方的话给予500分，如果是人方的话给予－500分；     
 		if(blankCount4_1>0) {
-			score = 500;
+			score = 500+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成单活3，如果是机器方的话给予200分，如果是人方的话给予－200分；    
 		if(blankCount3_2==1) {
-			score = 200;
+			score = 200+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否已成双活2，如果是机器方的话给予100分，如果是人方的话给予－100分；
 		if(blankCount2_2==4) {
-			score = 100;
+			score = 100+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成死3，如果是机器方的话给予60分，如果是人方的话给予－60分； 
 		if(blankCount3_1>0) {
-			score = 60;
+			score = 60+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成双活2，如果是机器方的话给予30分，如果是人方的话给予－30分；
 		if(blankCount2_2==2) {
-			score = 30;
+			score = 30+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成活2，如果是机器方的话给予20分，如果是人方的话给予－20分；
 		if(blankCount2_2>0) {
-			score = 20;
+			score = 20+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}
 		//判断是否能成死2，如果是机器方的话给予10分，如果是人方的话给予－10分。
 		if(blankCount2_1>0) {
-			score = 10;
+			score = 10+posValue[chess.x][chess.y];
 			score = isAI?score:-score;
 			return score;
 		}

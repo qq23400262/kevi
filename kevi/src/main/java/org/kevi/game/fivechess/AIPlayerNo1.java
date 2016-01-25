@@ -29,7 +29,6 @@ public class AIPlayerNo1 implements AIPlayer {
 					_score1 = -chessboard.cbSet.evlation(testBlackChess, false);
 					if(_score == 100000) {
 						//自己赢了
-						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 						ii = i;
 						jj = j;
 						score = _score;

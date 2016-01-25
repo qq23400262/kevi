@@ -35,7 +35,7 @@ public class AIPlayerNo3 implements AIPlayer {
 	public int alphabeta(Chess chess, int depth, int α, int β, boolean isMaxplay) {
 		int score = evaluate(chess, isMaxplay);
 	    if (Math.abs(score)==100000 || depth <= 0) {
-	    	System.out.println(cs.toString()+score);
+//	    	System.out.println(cs.toString()+score);
 	        return score;
 		}
 		Chess _chess;
@@ -61,11 +61,10 @@ public class AIPlayerNo3 implements AIPlayer {
 	    	for (int i = 0; i <= chessboard.size; i++) {
 				for (int j = 0; j <= chessboard.size; j++) {
 					if(cs.isBlankChess(j, i)) {
-						//System.out.println("------------------------");
 						_chess = ChessFactory.produceBlackChess(chessboard.chessSize);
 						_chess.setXY(j, i, chessboard.gridSize);
 						cs.addChess(_chess);
-						β = Math.min(β, alphabeta(_chess, depth-1, α, β, true));
+						β = Math.min(β, alphabeta(_chess, depth-1, α, β, false));
 						cs.removeChess(_chess);
 						if (β <= α) // 该极大节点的值<=β<=α，该极小节点后面的搜索到的值肯定会小于α，因此不会被其上层的极大节点所选用了。对于根节点，α为负无穷
 							 return β;
@@ -80,7 +79,7 @@ public class AIPlayerNo3 implements AIPlayer {
 	@Override
 	public Chess getBeastChess() {
 		cs = chessboard.cbSet.clone();
-		int maxScore = 0;
+		int maxScore = -Integer.MAX_VALUE;
 		int _maxScore = 0;
 		Chess _chess;
 		int ii = 0;
@@ -91,20 +90,14 @@ public class AIPlayerNo3 implements AIPlayer {
 					_chess = ChessFactory.produceWhiteChess(chessboard.chessSize);
 					_chess.setXY(j, i, chessboard.gridSize);
 					cs.addChess(_chess);
-					maxScore = alphabeta(_chess, 1, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
-					System.out.println("XXXXXXXX"+maxScore);
-					if(_maxScore!=0) {
-						System.out.println("_maxScore"+_maxScore);
-					}
+					maxScore = -alphabeta(_chess, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, false);
 					cs.removeChess(_chess);
+					System.out.println(maxScore+"]]]]]");
 					if(maxScore!=0)
-					System.out.println("====="+maxScore);
 					if(maxScore<_maxScore) {
-						System.out.println("heeeeeeeeeeeee");
 						ii = i;
 						jj = j;
 						maxScore = _maxScore;
-						System.out.println(maxScore +"-"+ _maxScore+"=="+ii+","+jj);
 					}
 				}
 				

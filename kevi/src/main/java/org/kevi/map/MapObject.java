@@ -1,7 +1,6 @@
 package org.kevi.map;
 
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Display;
 
 public class MapObject {
 	//地图原点坐标

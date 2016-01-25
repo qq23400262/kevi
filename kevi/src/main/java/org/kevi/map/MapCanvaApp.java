@@ -79,9 +79,9 @@ public class MapCanvaApp extends Thread implements MapHelper{
 		thread.start();
 	}
 	
-	private void clearCanvas() {
-		gc.fillRectangle(0,0,canvas.getSize().x,canvas.getSize().y);
-	}
+//	private void clearCanvas() {
+//		gc.fillRectangle(0,0,canvas.getSize().x,canvas.getSize().y);
+//	}
 	
 	MapObject mapData;
 	

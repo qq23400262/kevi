@@ -7,9 +7,10 @@
         <pattern>/*</pattern>
     </decorator>
 
-
     <!--<excludes>-->
         <!--<pattern>/index.jsp*</pattern>-->
     <!--</excludes>-->
-
+	<excludes>
+        <pattern>/index.jsp*</pattern>
+    </excludes>
 </decorators>

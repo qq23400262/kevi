@@ -10,4 +10,10 @@
 <body>
 
 </body>
+<script type="text/javascript">
+	$(function(){
+		var myCanvas = "<canvas id='myCanvas' style='background: red;' width='" + screen.availWidth + "px' height='"+ screen.availHeight + "px'></vanvas>";
+		document.body.insertAdjacentHTML("beforeEnd", myCanvas);
+	});
+</script>
 </html>

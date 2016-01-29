@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <decorators defaultdir="/WEB-INF/jsp/decorators">
-
+	<excludes>
+        <pattern>/WEB-INF/jsp/util/mouse.jsp</pattern>
+    </excludes>
     <!--main decorator-->
     <decorator name="main" page="main.jsp">
         <pattern>/*</pattern>
@@ -10,7 +12,5 @@
     <!--<excludes>-->
         <!--<pattern>/index.jsp*</pattern>-->
     <!--</excludes>-->
-	<excludes>
-        <pattern>/index.jsp*</pattern>
-    </excludes>
+	
 </decorators>

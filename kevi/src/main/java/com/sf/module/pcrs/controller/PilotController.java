@@ -138,7 +138,7 @@ public class PilotController {
 		MyPilot myPilot = (MyPilot)JSONObject.toBean(JSONObject.fromObject(jsonStr), MyPilot.class);
 		myPilot.setUserId(userService.loadCurrentUser().id());
 		pilotService.addMyPilot(myPilot);
-		Result ret = new Result(Result.SUCCESS, "添加成功！");
+		Result ret = new Result(Result.SUCCESS);
 		writeJson(response, ret);
 	}
 	
@@ -153,7 +153,7 @@ public class PilotController {
 		MyPilot myPilot = (MyPilot)JSONObject.toBean(JSONObject.fromObject(jsonStr), MyPilot.class);
 		myPilot.setUserId(userService.loadCurrentUser().id());
 		pilotService.deleteMyPilot(myPilot);
-		Result ret = new Result(Result.SUCCESS, "删除成功！");
+		Result ret = new Result(Result.SUCCESS);
 		writeJson(response, ret);
 	}
 	

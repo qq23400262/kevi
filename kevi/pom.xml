@@ -39,7 +39,7 @@
 
 
     <build>
-        <finalName>spring-oauth-server</finalName>
+        <finalName>kevi</finalName>
 
         <plugins>
             <plugin>

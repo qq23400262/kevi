@@ -4,7 +4,7 @@
   <distributable/>
   <context-param>
     <param-name>webAppRootKey</param-name>
-    <param-value>spring-oauth-server</param-value>
+    <param-value>kevi</param-value>
   </context-param>
   <filter>
     <filter-name>encodingFilter</filter-name>

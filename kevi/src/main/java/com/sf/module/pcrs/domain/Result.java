@@ -2,10 +2,16 @@ package com.sf.module.pcrs.domain;
 
 public class Result {
 	public static int SUCCESS = 0;
+	public static String SUCCESS_DESC = "SUCCESS";
 	public static int FAILD = 1;
+	public static String FAILD_DESC = "FAILD";
 	private int ret;
 	private String msg;
 	private Object entity_data;
+	public Result(int ret) {
+		this.ret = ret;
+		this.msg = ret==SUCCESS?SUCCESS_DESC:FAILD_DESC;
+	}
 	public Result(int ret, String msg) {
 		this.ret = ret;
 		this.msg = msg;

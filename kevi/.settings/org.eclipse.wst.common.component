@@ -4,7 +4,12 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+<<<<<<< HEAD
         <property name="java-output-path" value="/kevi/target/classes"/>
+=======
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+        <property name="java-output-path" value="/PCRS/target/classes"/>
+>>>>>>> branch 'master' of https://github.com/qq23400262/kevi
         <property name="component.exclusion.patterns" value="*/classes/spring-oauth-server.properties"/>
         <property name="context-root" value="kevi"/>
     </wb-module>

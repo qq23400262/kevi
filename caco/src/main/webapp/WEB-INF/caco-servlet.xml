@@ -13,6 +13,7 @@
     <!--annotation configuration -->
     <context:annotation-config/>
     <context:component-scan base-package="org.caco.web.controller"/>
+    <context:component-scan base-package="org.caco.weixin.controller"/>
 
     <!--static resource-->
     <mvc:resources mapping="/index.jsp*" location="/index.jsp"/>

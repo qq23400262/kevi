@@ -17,7 +17,7 @@ function initCanvas() {
 } 
 
 function drawMenu() {
-	var text = new CText(canvas, null);
+	var text = new CText(canvas, {id:1});
 	text.show();
 }
 

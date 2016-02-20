@@ -12,8 +12,9 @@
 
     <!--annotation configuration -->
     <context:annotation-config/>
-    <context:component-scan base-package="org.caco.web.controller"/>
     <context:component-scan base-package="org.caco.weixin.controller"/>
+    <context:component-scan base-package="org.caco.web.dao.impl" />
+    <context:component-scan base-package="org.caco.web.controller"/>
 
     <!--static resource-->
     <mvc:resources mapping="/index.jsp*" location="/index.jsp"/>
@@ -30,5 +31,8 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-    
+    <!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->  
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+	    <property name="maxUploadSize" value="10485760" />  
+	</bean>
 </beans>

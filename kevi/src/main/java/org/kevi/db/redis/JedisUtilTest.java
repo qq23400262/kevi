@@ -21,7 +21,7 @@ public class JedisUtilTest {
 
 	@Before
 	public void setUp() {
-		pool = new JedisPool(new JedisPoolConfig(), "10.88.5.171");
+		pool = new JedisPool(new JedisPoolConfig(), "testyun.cn");
 		jedis = pool.getResource();
 		// jedis.auth("password");
 	}

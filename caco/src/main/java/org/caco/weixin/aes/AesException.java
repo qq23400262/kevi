@@ -1,4 +1,4 @@
-package com.qq.weixin.mp.aes;
+package org.caco.weixin.aes;
 
 @SuppressWarnings("serial")
 public class AesException extends Exception {

@@ -6,7 +6,7 @@
 
 // ------------------------------------------------------------------------
 
-package com.qq.weixin.mp.aes;
+package org.caco.weixin.aes;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;

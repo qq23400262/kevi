@@ -11,7 +11,7 @@
  * 需要导入架包commons-codec-1.9（或commons-codec-1.8等其他版本）
  * 官方下载地址：http://commons.apache.org/proper/commons-codec/download_codec.cgi
  */
-package com.qq.weixin.mp.aes;
+package org.caco.weixin.aes;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;

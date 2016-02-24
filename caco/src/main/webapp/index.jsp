@@ -11,9 +11,9 @@ body,canvas {
 </style>
 </head>
 <body style="margin: 0px;padding: 0px;">
-<canvas id="canvas" style="">
-</canvas>
+
 </body>
 <script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/canvas.js"></script>
 <script type="text/javascript" src="js/mycontrols.js"></script>
 </html>

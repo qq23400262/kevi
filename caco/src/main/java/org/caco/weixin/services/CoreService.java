@@ -1,7 +1,10 @@
 package org.caco.weixin.services;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import org.caco.taobao.controller.InventoryController;
+import org.caco.taobao.domain.Inventory;
 import org.caco.weixin.pojo.resp.TextMessage;
 import org.caco.weixin.util.MessageUtil;
 
@@ -40,8 +43,26 @@ public class CoreService {
 
 			// 文本消息
 			if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
-				String content = requestMap.get("Content"); 
-				respContent = "Sunlight提示：您发送的是文本消息！内容是："+content;
+				String content = requestMap.get("Content");
+				List<Inventory> inventorys = InventoryController.getInventorys();
+				String result ="";
+				String c = content.toUpperCase();
+				int n = 0;
+				for (Inventory inventory : inventorys) {
+					if(inventory.getNo().toUpperCase().indexOf(c) != -1) {
+						n++;
+						result = inventory.toString();
+					}
+				}
+				//respContent = "Sunlight提示：您发送的是文本消息！内容是："+result;
+				if(n>1) {
+					respContent = "找不到该款式编号库存";
+				} else if(n>1) {
+					respContent = "结果不唯一，请输入完整的款式编号";
+				} else {
+					respContent = "库存是："+result;
+				}
+				
 			}
 			// 图片消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {

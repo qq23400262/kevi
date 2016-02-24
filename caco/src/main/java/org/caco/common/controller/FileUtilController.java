@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -21,13 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/util/")
 public class FileUtilController {
+	@ResponseBody
 	@RequestMapping(value = "fileupload", method = RequestMethod.POST)  
 	public void upload(HttpServletResponse response, HttpServletRequest request, @RequestParam MultipartFile[] files) {
 		String fileNames="";
 		String fileName="";
 		
-		String port = request.getLocalPort()==80?"":":"+request.getLocalPort();
-		String url = "http://"+request.getServerName() + port + "/caco/upload/";
+		//String port = request.getLocalPort()==80?"":":"+request.getLocalPort();
+		//String url = "http://"+request.getServerName() + port + "/caco/upload/";
 		try {
 			// 文件个数至少1个以上
 			if (files != null && files.length > 0) {
@@ -39,13 +41,13 @@ public class FileUtilController {
 //						String filePath = request.getServletContext().getRealPath("/")
 //								+ "upload/" + file.getOriginalFilename();
 						fileName = UUID.randomUUID()+(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
-						if("".equals(fileNames)) {
-							fileNames = url + fileName;
-						} else {
-							fileNames += "," + url + fileName;
-						}
 						String filePath = request.getServletContext().getRealPath("/")
 								+ "upload/" + fileName;
+						if("".equals(fileNames)) {
+							fileNames = filePath;
+						} else {
+							fileNames += "," + filePath;
+						}
 						// 转存文件
 						file.transferTo(new File(filePath));
 					}
@@ -54,8 +56,9 @@ public class FileUtilController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		Result ret = new Result(Result.SUCCESS, "上传成功", fileNames);
 		WebUtils.writeJson(response, ret);
+		
 	}
+	
 }

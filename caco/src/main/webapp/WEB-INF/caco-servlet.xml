@@ -12,13 +12,16 @@
 
     <!--annotation configuration -->
     <context:annotation-config/>
-    <context:component-scan base-package="org.caco.weixin.controller"/>
     <context:component-scan base-package="org.caco.web.dao.impl" />
+    <context:component-scan base-package="org.caco.common.controller"/>
     <context:component-scan base-package="org.caco.web.controller"/>
+    <context:component-scan base-package="org.caco.weixin.controller"/>
+    <context:component-scan base-package="org.caco.taobao.controller"/>
 
     <!--static resource-->
     <mvc:resources mapping="/index.jsp*" location="/index.jsp"/>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/upload/**" location="/upload/"/>
     <mvc:resources mapping="/js/**" location="/js/"/>
 
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">

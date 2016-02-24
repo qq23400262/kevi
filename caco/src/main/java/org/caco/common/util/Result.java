@@ -1,4 +1,4 @@
-package org.caco.web.controller;
+package org.caco.common.util;
 
 public class Result {
 	public static int SUCCESS = 0;

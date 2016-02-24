@@ -1,4 +1,4 @@
-package org.caco.web.controller;
+package org.caco.common.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

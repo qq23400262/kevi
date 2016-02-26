@@ -509,6 +509,10 @@
                   <encoding>utf-8</encoding>
                   <source>1.8</source>
                   <target>1.8</target>
+                  <compilerArguments>  
+                  	<verbose />  
+              		<bootclasspath>${java.home}/lib/rt.jar;${java.home}/lib/jce.jar</bootclasspath>  
+        		</compilerArguments>
               </configuration>
           </plugin>
           <!-- add by caco 代码自动发布，兼容tomcat8 -->
@@ -517,7 +521,7 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<url>http://testyun.cn:8080/manager/text</url>
+					<url>http://testyun.cn/manager/text</url>
 					<!-- server、username、password对应maven的setting下的配置 -->
 					<server>tomcat</server>
 					<username>admin</username>

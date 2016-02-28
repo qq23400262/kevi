@@ -1,8 +1,6 @@
 		<%
 			String pathf = request.getContextPath();
-			String basePathf = request.getScheme() + "://"
-					+ request.getServerName() + ":" + request.getServerPort()
-					+ pathf + "/";
+			String basePathf = com.fh.util.PageUtil.getPreBasePath(request)+pathf+"/";
 		%>
 		<!--[if !IE]> -->
 		<script type="text/javascript">

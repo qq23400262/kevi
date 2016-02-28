@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String basePath = com.fh.util.PageUtil.getPreBasePath(request)+path+"/";
 %>
 <!DOCTYPE html>
 <html lang="en">

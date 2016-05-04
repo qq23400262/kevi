@@ -275,6 +275,14 @@
 			}
 		</script>
 	</c:if>
+	<c:if test="${'3' == pd.msg}">
+		<script type="text/javascript">
+			$(tsMsg());
+			function tsMsg(){
+				alert('你的账号在其它地方登录');
+			}
+		</script>
+	</c:if>
 	<script src="static/login/js/bootstrap.min.js"></script>
 	<script src="static/js/jquery-1.7.2.js"></script>
 	<script src="static/login/js/jquery.easing.1.3.js"></script>

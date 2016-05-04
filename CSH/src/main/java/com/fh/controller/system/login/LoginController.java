@@ -210,6 +210,7 @@ public class LoginController extends BaseController {
 				if(null == session.getAttribute(USERNAME + Const.SESSION_QX)){
 					session.setAttribute(USERNAME + Const.SESSION_QX, this.getUQX(USERNAME));	//按钮权限放到session中
 				}
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				this.getRemortIP(USERNAME);	//更新登录IP
 				mv.setViewName("system/index/main");
 				mv.addObject("user", user);

@@ -98,6 +98,9 @@ function online(){
 			}else if(message.type == 'thegoout'){
 				$("body").html("");
 				goOut("2");
+			}else if(message.type == 'othersLogin'){
+				$("body").html("");
+				goOut("3");
 			}else if(message.type == 'senFhsms'){
 				fhsmsCount = Number(fhsmsCount)+1;
 				$("#fhsmsCount").html(Number(fhsmsCount));

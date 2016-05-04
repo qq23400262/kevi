@@ -121,6 +121,18 @@ public class OnlineChatServer extends WebSocketServer{
 	}
 	
 	/**
+	 * 通知用户，账号在其它地方登录，即将下线
+	 * @param conn
+	 * @param type
+	 */
+	public void othersLogin(WebSocket conn,String type){
+		JSONObject result = new JSONObject();
+		result.element("type", type);
+		result.element("msg", "othersLogin");
+		OnlineChatServerPool.sendMessageToUser(conn,result.toString());	
+	}
+	
+	/**
 	 * 用户下线处理
 	 * @param user
 	 */
@@ -159,11 +171,16 @@ public class OnlineChatServer extends WebSocketServer{
 	 */
 	public synchronized void onlineMaganger(int type,String user, WebSocket conn){
 		if(type == 1){
-			if(null == OnlineChatServerPool.getWebSocketByUser(user)){		//判断用户是否在其它终端登录
+			WebSocket _conn = OnlineChatServerPool.getWebSocketByUser(user);
+			if(null == _conn){		//判断用户是否在其它终端登录
 				OnlineChatServerPool.addUser(user,conn);					//向连接池添加当前的连接对象
 				addUserToFhadmin(user);
 			}else{
-				goOut(conn,"goOut");
+				//goOut(conn,"goOut");//这里如果已经有用户就登出，这里不登出
+				othersLogin(_conn,"othersLogin");
+				onlineMaganger(2,null,_conn);//下线已经在线的用户
+				OnlineChatServerPool.addUser(user,conn);					//向连接池添加当前的连接对象
+				addUserToFhadmin(user);
 			}
 		}else{
 			OnlineChatServerPool.removeUser(conn);							//在连接池中移除连接
